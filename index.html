@@ -6,105 +6,112 @@
 <title>📢 ระบบประกาศแบน | Midnight Racing</title>
 <style>
     :root {
-        --bg-color: #1e1e1e;
-        --card-color: #2b2b2b;
-        --input-color: #333;
-        --accent: #3a86ff;
-        --text-light: #f1f1f1;
-        --text-gray: #aaa;
+        --primary-color: #4a90e2;
+        --secondary-color: #f5f6fa;
+        --bg-color: #f5f6fa;
+        --card-color: #ffffff;
+        --text-dark: #2d3436;
+        --text-gray: #636e72;
+        --input-bg: #f0f0f0;
+        --input-border: #dcdde1;
+        --button-hover: #357ab7;
     }
 
     body {
         background-color: var(--bg-color);
-        color: var(--text-light);
         font-family: 'Segoe UI', sans-serif;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 2rem;
+        margin: 0;
         padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    h2 {
+        text-align: center;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        font-size: 1.8rem;
     }
 
     .card {
         background: var(--card-color);
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        padding: 30px 25px;
         width: 400px;
         transition: all 0.3s ease;
     }
 
     .card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 25px rgba(0,0,0,0.5);
-    }
-
-    h2 {
-        text-align: center;
-        color: var(--accent);
-        margin-bottom: 15px;
-        font-size: 1.5rem;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
     }
 
     label {
-        font-size: 0.9rem;
-        color: var(--text-gray);
         display: block;
-        margin-top: 10px;
+        font-size: 0.95rem;
+        color: var(--text-gray);
+        margin-top: 15px;
     }
 
     input, textarea, select {
         width: 100%;
-        padding: 10px;
+        padding: 12px 15px;
         margin-top: 5px;
-        border: none;
-        border-radius: 8px;
-        background: var(--input-color);
-        color: white;
-        outline: none;
+        border: 1px solid var(--input-border);
+        border-radius: 10px;
+        background: var(--input-bg);
+        color: var(--text-dark);
         font-size: 0.95rem;
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        outline: none;
+        transition: border 0.3s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: var(--primary-color);
     }
 
     textarea { resize: vertical; }
 
     button {
         width: 100%;
-        padding: 10px;
-        background: var(--accent);
+        padding: 12px;
+        background: var(--primary-color);
         color: white;
         border: none;
-        border-radius: 8px;
-        margin-top: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
         font-weight: 600;
         cursor: pointer;
         transition: background 0.3s ease, transform 0.2s;
     }
 
     button:hover {
-        background: #4c9fff;
-        transform: scale(1.02);
+        background: var(--button-hover);
+        transform: scale(1.03);
     }
 
     .preview {
         background: var(--card-color);
-        border-radius: 16px;
+        border-radius: 12px;
         padding: 25px;
         width: 420px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
     }
 
     .embed {
-        background-color: #2f3136;
-        border-left: 5px solid var(--accent);
+        background-color: #f0f0f0;
+        border-left: 5px solid var(--primary-color);
         border-radius: 8px;
         padding: 15px;
         position: relative;
     }
 
     .embed .avatar {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         position: absolute;
         top: 15px;
@@ -115,31 +122,28 @@
     .embed .title {
         font-weight: bold;
         font-size: 1.1rem;
-        color: var(--accent);
+        color: var(--primary-color);
     }
 
     .embed p {
         margin-top: 6px;
-        color: #ccc;
+        color: var(--text-dark);
         font-size: 0.9rem;
     }
 
     .embed-field {
-        margin-top: 8px;
+        margin-top: 10px;
+        font-size: 0.9rem;
     }
 
     .embed-field-name {
-        color: var(--accent);
+        color: var(--primary-color);
         font-weight: bold;
     }
 
-    @media (max-width: 900px) {
-        body {
-            flex-direction: column;
-            align-items: center;
-        }
+    @media (max-width: 500px) {
         .card, .preview {
-            width: 90%;
+            width: 95%;
         }
     }
 </style>
@@ -186,119 +190,9 @@
     <div class="embed" id="embedPreview"></div>
 </div>
 
+<!-- Script เดิมไม่ต้องเปลี่ยน -->
 <script>
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB"; 
-const STEAM_API_KEY = "CF53018545C699992A813A8A5C84C410"; 
-
-const banTypeData = {
-    "ถาวร": { color: 0xff0000, icon: "🔴", text: "ถาวร" },
-    "ใบแดง": { color: 0xd62828, icon: "🔴", text: "ใบแดง" },
-    "ใบส้ม": { color: 0xffa500, icon: "🟠", text: "ใบส้ม" },
-    "ใบเหลือง": { color: 0xfff200, icon: "🟡", text: "ใบเหลือง" },
-    "ปรับ": { color: 0x00b894, icon: "💸", text: "ปรับ" }
-};
-
-// แปลง Steam Hex เป็น SteamID64
-function steamHexToSteamID64(steamHex) {
-    if (!steamHex.startsWith("steam:")) return null;
-    const hexPart = steamHex.split(":")[1];
-    return (BigInt("0x" + hexPart) + BigInt("76561197960265728")).toString();
-}
-
-// ดึง avatar จาก Steam API
-async function getSteamAvatar(steamHex) {
-    try {
-        const steamID64 = steamHexToSteamID64(steamHex);
-        if (!steamID64) return null;
-        const res = await fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${STEAM_API_KEY}&steamids=${steamID64}`);
-        const data = await res.json();
-        return data.response.players[0]?.avatarfull || null;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-}
-
-// สร้างตัวอย่าง Embed
-async function createPreview() {
-    const type = document.getElementById("banType").value;
-    const { color, icon, text } = banTypeData[type];
-    const name = document.getElementById("name").value;
-    const discordID = document.getElementById("discord").value;
-    const steamhex = document.getElementById("steamhex").value;
-    const reason = document.getElementById("reason").value;
-    const fine = document.getElementById("fine").value;
-    const admin = document.getElementById("admin").value;
-    const date = new Date().toLocaleString('th-TH');
-    const avatar = await getSteamAvatar(steamhex);
-
-    let html = `
-        <div class="title">${icon} ประกาศแบน (${text})</div>
-        <p>ฝ่าฝืนกฎของ Midnight Racing ${discordID ? `<br>ผู้ใช้ Discord: <@${discordID}>` : ""}</p>
-        ${avatar ? `<img src="${avatar}" class="avatar">` : ""}
-        <div class="embed-field"><span class="embed-field-name">🎮 Name:</span> ${name}</div>
-        <div class="embed-field"><span class="embed-field-name">🆔 Discord:</span> <@${discordID}></div>
-        <div class="embed-field"><span class="embed-field-name">💻 SteamHex:</span> ${steamhex}</div>
-        <div class="embed-field"><span class="embed-field-name">❗ Reason:</span> ${reason}</div>
-        <div class="embed-field"><span class="embed-field-name">💸 ค่าปรับ:</span> ${fine}</div>
-        <div class="embed-field"><span class="embed-field-name">📅 วันที่:</span> ${date}<br>โดย [ADMIN] => ${admin}</div>
-    `;
-    const preview = document.getElementById("embedPreview");
-    preview.innerHTML = html;
-    preview.parentElement.style.display = "block";
-}
-
-document.getElementById("previewBtn").addEventListener("click", createPreview);
-
-// ส่งไป Discord
-document.getElementById("banForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const type = document.getElementById("banType").value;
-    const { color, icon, text } = banTypeData[type];
-    const name = document.getElementById("name").value;
-    const discordID = document.getElementById("discord").value;
-    const steamhex = document.getElementById("steamhex").value;
-    const reason = document.getElementById("reason").value;
-    const fine = document.getElementById("fine").value;
-    const admin = document.getElementById("admin").value;
-    const date = new Date().toLocaleString('th-TH');
-    const avatar = await getSteamAvatar(steamhex);
-
-    const embed = {
-        title: `${icon} ประกาศแบน (${text})`,
-        description: `ฝ่าฝืนกฎของ Midnight Racing\n${discordID ? `<@${discordID}>` : ""}`,
-        color: color,
-        thumbnail: avatar ? { url: avatar } : undefined,
-        fields: [
-            { name: "🎮 Name", value: name },
-            { name: "🆔 Discord", value: `<@${discordID}>` },
-            { name: "💻 SteamHex", value: steamhex },
-            { name: "❗ Reason", value: reason },
-            { name: "💸 ค่าปรับ", value: fine },
-            { name: "📅 วันที่", value: `${date}\nโดย [ADMIN] => ${admin}` }
-        ]
-    };
-
-    const payload = { username: "Midnight Racing", embeds: [embed] };
-
-    try {
-        const res = await fetch(WEBHOOK_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-            alert("✅ ส่งข้อมูลเรียบร้อย!");
-            e.target.reset();
-            document.getElementById("previewBox").style.display = "none";
-        } else {
-            alert("❌ ส่งไม่สำเร็จ ตรวจสอบ Webhook หรือ Steam API Key");
-        }
-    } catch (err) {
-        console.error(err);
-        alert("❌ เกิดข้อผิดพลาด!");
-    }
-});
+/* ...โค้ด JavaScript เดิม ... */
 </script>
 </body>
 </html>
