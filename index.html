@@ -116,22 +116,11 @@ button:hover {
     box-sizing: border-box;
 }
 
-.embed .title {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: var(--primary-color);
-}
-
-.embed p, .embed .embed-field {
-    margin-top: 6px;
+.embed p {
+    margin: 5px 0;
     color: var(--text-dark);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     word-wrap: break-word;
-}
-
-.embed-field-name {
-    color: var(--primary-color);
-    font-weight: bold;
 }
 
 @media (max-width: 500px) {
@@ -180,11 +169,20 @@ button:hover {
 
 <div class="preview" id="previewBox" style="display:none;">
     <h2>👀 ตัวอย่าง Embed</h2>
-    <div class="embed" id="embedPreview"></div>
+    <div class="embed" id="embedPreview">
+        <p>📢 ประกาศใบ <span style="color:red;"><strong>ถาวร</strong></span></p>
+        <p>💠 ฝ่าฝืนกฎของ Midnight Racing</p>
+        <p>👤 Name: <strong>MOO TEDET99</strong></p>
+        <p>🆔 Discord: <strong>MOO TEDET99</strong></p>
+        <p>🖥 SteamHex: <strong>steam:xxxxxxxx</strong></p>
+        <p>📄 Reason: <strong>xxxxxxxx</strong></p>
+        <p>💰 ค่าปรับ: <strong>IC</strong></p>
+        <p style="font-size:0.8rem; color:gray;">ประกาศเมื่อ | 21/10/2025 14:37 | โดย [ADMIN] MR System </p>
+    </div>
 </div>
 
 <script>
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB"; // ใส่ Webhook ของ Discord
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
 
 const form = document.getElementById('banForm');
 const previewBtn = document.getElementById('previewBtn');
@@ -200,14 +198,31 @@ function updatePreview() {
     const admin = document.getElementById('admin').value;
     const banType = document.getElementById('banType').value;
 
+    const colorMap = {
+        "ถาวร": "🔴",
+        "ใบแดง": "🔴",
+        "ใบส้ม": "🟠",
+        "ใบเหลือง": "🟡",
+        "ปรับ": "💸"
+    };
+
+    const colorStyleMap = {
+        "ถาวร": "red",
+        "ใบแดง": "red",
+        "ใบส้ม": "orange",
+        "ใบเหลือง": "yellow",
+        "ปรับ": "green"
+    };
+
     embedPreview.innerHTML = `
-        <div class="embed-field"><span class="embed-field-name">ประเภท:</span> ${banType}</div>
-        <div class="embed-field"><span class="embed-field-name">ชื่อในเกม:</span> ${name}</div>
-        <div class="embed-field"><span class="embed-field-name">Discord ID:</span> ${discord}</div>
-        <div class="embed-field"><span class="embed-field-name">Steam Hex:</span> ${steam}</div>
-        <div class="embed-field"><span class="embed-field-name">เหตุผล:</span> ${reason}</div>
-        <div class="embed-field"><span class="embed-field-name">ค่าปรับ:</span> ${fine}</div>
-        <div class="embed-field"><span class="embed-field-name">ผู้แบน:</span> ${admin}</div>
+        <p>${colorMap[banType]} ประกาศใบ <span style="color:${colorStyleMap[banType]};"><strong>${banType}</strong></span></p>
+        <p>💠 ฝ่าฝืนกฎของ Midnight Racing</p>
+        <p>👤 Name: <strong>${name}</strong></p>
+        <p>🆔 Discord: <strong>@${discord}</strong></p>
+        <p>🖥 SteamHex: <strong>${steam}</strong></p>
+        <p>📄 Reason: <strong>${reason}</strong></p>
+        <p>💰 ค่าปรับ: <strong>${fine}</strong></p>
+        <p style="font-size:0.8rem; color:gray;">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | โดย [${admin}] MR System </p>
     `;
     previewBox.style.display = 'block';
     previewBox.scrollIntoView({ behavior: 'smooth' });
@@ -227,21 +242,17 @@ form.addEventListener('submit', async (e) => {
     const admin = document.getElementById('admin').value;
     const banType = document.getElementById('banType').value;
 
+    const colorMap = {
+        "ถาวร": "🔴",
+        "ใบแดง": "🔴",
+        "ใบส้ม": "🟠",
+        "ใบเหลือง": "🟡",
+        "ปรับ": "💸"
+    };
+
+    // Discord payload as content string (เหมือน Embed แบบหน้าเว็บ)
     const payload = {
-        embeds: [{
-            title: "📢 ประกาศแบน",
-            color: 16711680,
-            fields: [
-                { name: "ประเภท", value: banType, inline: true },
-                { name: "ชื่อในเกม", value: name, inline: true },
-                { name: "Discord ID", value: discord, inline: true },
-                { name: "Steam Hex", value: steam, inline: true },
-                { name: "เหตุผล", value: reason, inline: false },
-                { name: "ค่าปรับ", value: fine, inline: true },
-                { name: "ผู้แบน", value: admin, inline: true },
-            ],
-            timestamp: new Date()
-        }]
+        content: `${colorMap[banType]} ประกาศใบ ${banType}\n💠 ฝ่าฝืนกฎของ PLAY COMMUNITY\n👤 Name: ${name}\n🆔 Discord: @${discord}\n🖥 SteamHex: ${steam}\n📄 Reason: ${reason}\n💰 ค่าปรับ: ${fine}\nประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | โดย [${admin}] MR System `
     };
 
     try {
@@ -263,9 +274,9 @@ form.addEventListener('submit', async (e) => {
     }
 });
 </script>
+
 <footer>
 <p>&copy; 2025 MOO TEDET99. All rights reserved.</p>
 </footer>
 </body>
 </html>
-
