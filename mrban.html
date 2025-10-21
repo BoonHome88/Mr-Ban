@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📢 ระบบประกาศแบน | Midnight Racing</title>
+<style>
+    :root {
+        --bg-color: #1e1e1e;
+        --card-color: #2b2b2b;
+        --input-color: #333;
+        --accent: #3a86ff;
+        --text-light: #f1f1f1;
+        --text-gray: #aaa;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-light);
+        font-family: 'Segoe UI', sans-serif;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        padding: 40px 20px;
+    }
+
+    .card {
+        background: var(--card-color);
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        padding: 25px;
+        width: 400px;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+        text-align: center;
+        color: var(--accent);
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+    }
+
+    label {
+        font-size: 0.9rem;
+        color: var(--text-gray);
+        display: block;
+        margin-top: 10px;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 8px;
+        background: var(--input-color);
+        color: white;
+        outline: none;
+        font-size: 0.95rem;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    textarea { resize: vertical; }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        margin-top: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s;
+    }
+
+    button:hover {
+        background: #4c9fff;
+        transform: scale(1.02);
+    }
+
+    .preview {
+        background: var(--card-color);
+        border-radius: 16px;
+        padding: 25px;
+        width: 420px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .embed {
+        background-color: #2f3136;
+        border-left: 5px solid var(--accent);
+        border-radius: 8px;
+        padding: 15px;
+        position: relative;
+    }
+
+    .embed .avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        object-fit: cover;
+    }
+
+    .embed .title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: var(--accent);
+    }
+
+    .embed p {
+        margin-top: 6px;
+        color: #ccc;
+        font-size: 0.9rem;
+    }
+
+    .embed-field {
+        margin-top: 8px;
+    }
+
+    .embed-field-name {
+        color: var(--accent);
+        font-weight: bold;
+    }
+
+    @media (max-width: 900px) {
+        body {
+            flex-direction: column;
+            align-items: center;
+        }
+        .card, .preview {
+            width: 90%;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>📢 ส่งประกาศแบน</h2>
+    <form id="banForm">
+        <label>ประเภทการแบน</label>
+        <select id="banType" required>
+            <option value="ถาวร">🔴 ถาวร</option>
+            <option value="ใบแดง">🔴 ใบแดง</option>
+            <option value="ใบส้ม">🟠 ใบส้ม</option>
+            <option value="ใบเหลือง">🟡 ใบเหลือง</option>
+            <option value="ปรับ">💸 ปรับ</option>
+        </select>
+
+        <label>ชื่อในเกม</label>
+        <input type="text" id="name" required>
+
+        <label>ชื่อ Discord</label>
+        <input type="text" id="discord" required>
+
+        <label>Steam Hex</label>
+        <input type="text" id="steamhex" placeholder="steam:1100001xxxxxxx" required>
+
+        <label>เหตุผล (Reason)</label>
+        <textarea id="reason" rows="3" required></textarea>
+
+        <label>ค่าปรับ</label>
+        <input type="text" id="fine" value="0 IC">
+
+        <label>ผู้แบน</label>
+        <input type="text" id="admin" required>
+
+        <button type="button" id="previewBtn">🔍 แสดงตัวอย่าง</button>
+        <button type="submit">🚀 ส่งไป Discord</button>
+    </form>
+</div>
+
+<div class="preview" id="previewBox" style="display:none;">
+    <h2>👀 ตัวอย่าง Embed</h2>
+    <div class="embed" id="embedPreview"></div>
+</div>
+
+<script>
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB"; // 🔧 ใส่ webhook ของคุณ
+const STEAM_API_KEY = "CF53018545C699992A813A8A5C84C410"; // 🔧 ใส่ Steam API Key
+
+const banTypeData = {
+    "ถาวร": { color: 0xff0000, icon: "🔴", text: "ถาวร" },
+    "ใบแดง": { color: 0xd62828, icon: "🔴", text: "ใบแดง" },
+    "ใบส้ม": { color: 0xffa500, icon: "🟠", text: "ใบส้ม" },
+    "ใบเหลือง": { color: 0xfff200, icon: "🟡", text: "ใบเหลือง" },
+    "ปรับ": { color: 0x00b894, icon: "💸", text: "ปรับ" }
+};
+
+async function getSteamAvatar(steamHex) {
+    try {
+        if (!steamHex.startsWith("steam:")) return null;
+        const hexPart = steamHex.split(":")[1];
+        const steamID64 = (BigInt(hexPart) + BigInt("76561197960265728")).toString();
+        const res = await fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${STEAM_API_KEY}&steamids=${steamID64}`);
+        const data = await res.json();
+        return data.response.players[0]?.avatarfull || null;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
+async function createPreview() {
+    const type = document.getElementById("banType").value;
+    const { color, icon, text } = banTypeData[type];
+    const name = document.getElementById("name").value;
+    const discord = document.getElementById("discord").value;
+    const steamhex = document.getElementById("steamhex").value;
+    const reason = document.getElementById("reason").value;
+    const fine = document.getElementById("fine").value;
+    const admin = document.getElementById("admin").value;
+    const date = new Date().toLocaleString('th-TH');
+    const avatar = await getSteamAvatar(steamhex);
+
+    let html = `
+        <div class="title">${icon} ประกาศแบน (${text})</div>
+        <p>ฝ่าฝืนกฎของ Midnight Racing</p>
+        ${avatar ? `<img src="${avatar}" class="avatar">` : ""}
+        <div class="embed-field"><span class="embed-field-name">🎮 Name:</span> ${name}</div>
+        <div class="embed-field"><span class="embed-field-name">🆔 Discord:</span> ${discord}</div>
+        <div class="embed-field"><span class="embed-field-name">💻 SteamHex:</span> ${steamhex}</div>
+        <div class="embed-field"><span class="embed-field-name">❗ Reason:</span> ${reason}</div>
+        <div class="embed-field"><span class="embed-field-name">💸 ค่าปรับ:</span> ${fine}</div>
+        <div class="embed-field"><span class="embed-field-name">📅 วันที่:</span> ${date}<br>โดย [ADMIN] => ${admin}</div>
+    `;
+    const preview = document.getElementById("embedPreview");
+    preview.innerHTML = html;
+    preview.parentElement.style.display = "block";
+}
+
+document.getElementById("previewBtn").addEventListener("click", createPreview);
+
+document.getElementById("banForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const type = document.getElementById("banType").value;
+    const { color, icon, text } = banTypeData[type];
+    const name = document.getElementById("name").value;
+    const discord = document.getElementById("discord").value;
+    const steamhex = document.getElementById("steamhex").value;
+    const reason = document.getElementById("reason").value;
+    const fine = document.getElementById("fine").value;
+    const admin = document.getElementById("admin").value;
+    const date = new Date().toLocaleString('th-TH');
+    const avatar = await getSteamAvatar(steamhex);
+
+    const embed = {
+        title: `${icon} ประกาศแบน (${text})`,
+        description: "ฝ่าฝืนกฎของ Midnight Racing",
+        color: color,
+        thumbnail: avatar ? { url: avatar } : undefined,
+        fields: [
+            { name: "🎮 Name", value: name },
+            { name: "🆔 Discord", value: discord },
+            { name: "💻 SteamHex", value: steamhex },
+            { name: "❗ Reason", value: reason },
+            { name: "💸 ค่าปรับ", value: fine },
+            { name: "📅 วันที่", value: `${date}\nโดย [ADMIN] => ${admin}` }
+        ]
+    };
+
+    const payload = { username: "Midnight Racing", embeds: [embed] };
+
+    const res = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+        alert("✅ ส่งข้อมูลเรียบร้อย!");
+        e.target.reset();
+        document.getElementById("previewBox").style.display = "none";
+    } else {
+        alert("❌ ส่งไม่สำเร็จ กรุณาตรวจสอบ Webhook URL หรือ Steam API Key");
+    }
+});
+</script>
+</body>
+</html>
