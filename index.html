@@ -29,12 +29,7 @@ body {
     gap: 30px;
 }
 
-h2 {
-    text-align: center;
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-}
+h2 { text-align: center; color: var(--primary-color); margin-bottom: 20px; font-size: 1.8rem; }
 
 .card {
     background: var(--card-color);
@@ -51,12 +46,7 @@ h2 {
     box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 }
 
-label {
-    display: block;
-    font-size: 0.95rem;
-    color: var(--text-gray);
-    margin-top: 15px;
-}
+label { display: block; font-size: 0.95rem; color: var(--text-gray); margin-top: 15px; }
 
 input, textarea, select {
     width: 100%;
@@ -72,9 +62,7 @@ input, textarea, select {
     box-sizing: border-box;
 }
 
-input:focus, textarea:focus, select:focus {
-    border-color: var(--primary-color);
-}
+input:focus, textarea:focus, select:focus { border-color: var(--primary-color); }
 
 textarea { resize: vertical; }
 
@@ -92,10 +80,7 @@ button {
     box-sizing: border-box;
 }
 
-button:hover {
-    background: var(--button-hover);
-    transform: scale(1.03);
-}
+button:hover { background: var(--button-hover); transform: scale(1.03); }
 
 .preview {
     background: var(--card-color);
@@ -116,18 +101,11 @@ button:hover {
     box-sizing: border-box;
 }
 
-.embed p {
-    margin: 5px 0;
-    color: var(--text-dark);
-    font-size: 0.95rem;
-    word-wrap: break-word;
-}
+.embed p { margin: 5px 0; color: var(--text-dark); font-size: 0.95rem; word-wrap: break-word; }
 
-@media (max-width: 500px) {
-    .card, .preview {
-        width: 95%;
-    }
-}
+.embed img.avatar { width: 48px; height: 48px; border-radius: 50%; vertical-align: middle; margin-right: 8px; }
+
+@media (max-width: 500px) { .card, .preview { width: 95%; } }
 </style>
 </head>
 <body>
@@ -173,7 +151,8 @@ button:hover {
 </div>
 
 <script>
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
+const DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL";
+const BACKEND_URL = "https://discord-avatar-server.up.railway.app/avatar";
 
 const form = document.getElementById('banForm');
 const previewBtn = document.getElementById('previewBtn');
@@ -188,7 +167,17 @@ const colorMap = {
     "ปรับ": { emoji: "💸", hex: 0x00FF00, color: "green" }
 };
 
-function updatePreview() {
+async function getDiscordAvatar(discordId) {
+    try {
+        const res = await fetch(`${BACKEND_URL}/${discordId}`);
+        const data = await res.json();
+        return data.avatar;
+    } catch {
+        return `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
+    }
+}
+
+async function updatePreview() {
     const name = document.getElementById('name').value;
     const discord = document.getElementById('discord').value;
     const steam = document.getElementById('steamhex').value;
@@ -197,8 +186,10 @@ function updatePreview() {
     const admin = document.getElementById('admin').value;
     const banType = document.getElementById('banType').value;
 
+    const avatarUrl = await getDiscordAvatar(discord);
+
     embedPreview.innerHTML = `
-        <p>${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color};"><strong>${banType}</strong></span></p>
+        <p><img src="${avatarUrl}" class="avatar">${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color};"><strong>${banType}</strong></span></p>
         <p>💠 ฝ่าฝืนกฎของ Midnight Racing</p>
         <p>👤 Name: <strong>${name}</strong></p>
         <p>🆔 Discord: <strong>@${discord}</strong></p>
@@ -215,7 +206,7 @@ previewBtn.addEventListener('click', updatePreview);
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    updatePreview();
+    await updatePreview();
 
     const name = document.getElementById('name').value;
     const discord = document.getElementById('discord').value;
@@ -224,22 +215,21 @@ form.addEventListener('submit', async (e) => {
     const fine = document.getElementById('fine').value;
     const admin = document.getElementById('admin').value;
     const banType = document.getElementById('banType').value;
+    const avatarUrl = await getDiscordAvatar(discord);
 
     const payload = {
         embeds: [{
-            title: `${colorMap[banType].emoji} ประกาศใบ ${banType}`,
+            title: "📢 ประกาศแบน",
             color: colorMap[banType].hex,
-            thumbnail: {
-                // ใช้ default avatar ของ Discord ตาม ID
-                url: `https://cdn.discordapp.com/embed/avatars/${parseInt(discord) % 5}.png`
-            },
+            thumbnail: { url: avatarUrl },
             fields: [
-                { name: "👤 Name", value: name, inline: true },
-                { name: "🆔 Discord", value: `@${discord}`, inline: true },
-                { name: "🖥 SteamHex", value: steam, inline: true },
-                { name: "📄 Reason", value: reason, inline: false },
-                { name: "💰 ค่าปรับ", value: fine, inline: true },
-                { name: "🛡 ผู้แบน", value: admin, inline: true }
+                { name: "ประเภท", value: banType, inline: true },
+                { name: "ชื่อในเกม", value: name, inline: true },
+                { name: "Discord ID", value: discord, inline: true },
+                { name: "Steam Hex", value: steam, inline: true },
+                { name: "เหตุผล", value: reason, inline: false },
+                { name: "ค่าปรับ", value: fine, inline: true },
+                { name: "ผู้แบน", value: admin, inline: true }
             ],
             timestamp: new Date()
         }]
@@ -252,7 +242,7 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify(payload)
         });
         if(response.ok){
-            alert("✅ ส่ง Embed ไป Discord เรียบร้อยแล้ว!");
+            alert("✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!");
             form.reset();
             previewBox.style.display = 'none';
         } else {
