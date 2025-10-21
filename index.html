@@ -161,8 +161,8 @@
         <label>ชื่อในเกม</label>
         <input type="text" id="name" required>
 
-        <label>ชื่อ Discord</label>
-        <input type="text" id="discord" required>
+        <label>Discord ID</label>
+        <input type="text" id="discord" required placeholder="ตัวเลข ID Discord">
 
         <label>Steam Hex</label>
         <input type="text" id="steamhex" placeholder="steam:1100001xxxxxxx" required>
@@ -187,8 +187,8 @@
 </div>
 
 <script>
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB"; // 🔧 ใส่ webhook ของคุณ
-const STEAM_API_KEY = "CF53018545C699992A813A8A5C84C410"; // 🔧 ใส่ Steam API Key
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB"; 
+const STEAM_API_KEY = "CF53018545C699992A813A8A5C84C410"; 
 
 const banTypeData = {
     "ถาวร": { color: 0xff0000, icon: "🔴", text: "ถาวร" },
@@ -198,11 +198,18 @@ const banTypeData = {
     "ปรับ": { color: 0x00b894, icon: "💸", text: "ปรับ" }
 };
 
+// แปลง Steam Hex เป็น SteamID64
+function steamHexToSteamID64(steamHex) {
+    if (!steamHex.startsWith("steam:")) return null;
+    const hexPart = steamHex.split(":")[1];
+    return (BigInt("0x" + hexPart) + BigInt("76561197960265728")).toString();
+}
+
+// ดึง avatar จาก Steam API
 async function getSteamAvatar(steamHex) {
     try {
-        if (!steamHex.startsWith("steam:")) return null;
-        const hexPart = steamHex.split(":")[1];
-        const steamID64 = (BigInt(hexPart) + BigInt("76561197960265728")).toString();
+        const steamID64 = steamHexToSteamID64(steamHex);
+        if (!steamID64) return null;
         const res = await fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${STEAM_API_KEY}&steamids=${steamID64}`);
         const data = await res.json();
         return data.response.players[0]?.avatarfull || null;
@@ -212,11 +219,12 @@ async function getSteamAvatar(steamHex) {
     }
 }
 
+// สร้างตัวอย่าง Embed
 async function createPreview() {
     const type = document.getElementById("banType").value;
     const { color, icon, text } = banTypeData[type];
     const name = document.getElementById("name").value;
-    const discord = document.getElementById("discord").value;
+    const discordID = document.getElementById("discord").value;
     const steamhex = document.getElementById("steamhex").value;
     const reason = document.getElementById("reason").value;
     const fine = document.getElementById("fine").value;
@@ -226,10 +234,10 @@ async function createPreview() {
 
     let html = `
         <div class="title">${icon} ประกาศแบน (${text})</div>
-        <p>ฝ่าฝืนกฎของ Midnight Racing</p>
+        <p>ฝ่าฝืนกฎของ Midnight Racing ${discordID ? `<br>ผู้ใช้ Discord: <@${discordID}>` : ""}</p>
         ${avatar ? `<img src="${avatar}" class="avatar">` : ""}
         <div class="embed-field"><span class="embed-field-name">🎮 Name:</span> ${name}</div>
-        <div class="embed-field"><span class="embed-field-name">🆔 Discord:</span> ${discord}</div>
+        <div class="embed-field"><span class="embed-field-name">🆔 Discord:</span> <@${discordID}></div>
         <div class="embed-field"><span class="embed-field-name">💻 SteamHex:</span> ${steamhex}</div>
         <div class="embed-field"><span class="embed-field-name">❗ Reason:</span> ${reason}</div>
         <div class="embed-field"><span class="embed-field-name">💸 ค่าปรับ:</span> ${fine}</div>
@@ -242,12 +250,13 @@ async function createPreview() {
 
 document.getElementById("previewBtn").addEventListener("click", createPreview);
 
+// ส่งไป Discord
 document.getElementById("banForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const type = document.getElementById("banType").value;
     const { color, icon, text } = banTypeData[type];
     const name = document.getElementById("name").value;
-    const discord = document.getElementById("discord").value;
+    const discordID = document.getElementById("discord").value;
     const steamhex = document.getElementById("steamhex").value;
     const reason = document.getElementById("reason").value;
     const fine = document.getElementById("fine").value;
@@ -257,12 +266,12 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 
     const embed = {
         title: `${icon} ประกาศแบน (${text})`,
-        description: "ฝ่าฝืนกฎของ Midnight Racing",
+        description: `ฝ่าฝืนกฎของ Midnight Racing\n${discordID ? `<@${discordID}>` : ""}`,
         color: color,
         thumbnail: avatar ? { url: avatar } : undefined,
         fields: [
             { name: "🎮 Name", value: name },
-            { name: "🆔 Discord", value: discord },
+            { name: "🆔 Discord", value: `<@${discordID}>` },
             { name: "💻 SteamHex", value: steamhex },
             { name: "❗ Reason", value: reason },
             { name: "💸 ค่าปรับ", value: fine },
@@ -272,18 +281,22 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 
     const payload = { username: "Midnight Racing", embeds: [embed] };
 
-    const res = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    });
-
-    if (res.ok) {
-        alert("✅ ส่งข้อมูลเรียบร้อย!");
-        e.target.reset();
-        document.getElementById("previewBox").style.display = "none";
-    } else {
-        alert("❌ ส่งไม่สำเร็จ กรุณาตรวจสอบ Webhook URL หรือ Steam API Key");
+    try {
+        const res = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+            alert("✅ ส่งข้อมูลเรียบร้อย!");
+            e.target.reset();
+            document.getElementById("previewBox").style.display = "none";
+        } else {
+            alert("❌ ส่งไม่สำเร็จ ตรวจสอบ Webhook หรือ Steam API Key");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("❌ เกิดข้อผิดพลาด!");
     }
 });
 </script>
