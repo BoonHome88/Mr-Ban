@@ -169,16 +169,7 @@ button:hover {
 
 <div class="preview" id="previewBox" style="display:none;">
     <h2>👀 ตัวอย่าง Embed</h2>
-    <div class="embed" id="embedPreview">
-        <p>📢 ประกาศใบ <span style="color:red;"><strong>ถาวร</strong></span></p>
-        <p>💠 ฝ่าฝืนกฎของ Midnight Racing</p>
-        <p>👤 Name: <strong>MOO TEDET99</strong></p>
-        <p>🆔 Discord: <strong>MOO TEDET99</strong></p>
-        <p>🖥 SteamHex: <strong>steam:xxxxxxxx</strong></p>
-        <p>📄 Reason: <strong>xxxxxxxx</strong></p>
-        <p>💰 ค่าปรับ: <strong>IC</strong></p>
-        <p style="font-size:0.8rem; color:gray;">ประกาศเมื่อ | 21/10/2025 14:37 | โดย [ADMIN] MR System </p>
-    </div>
+    <div class="embed" id="embedPreview"></div>
 </div>
 
 <script>
@@ -189,6 +180,14 @@ const previewBtn = document.getElementById('previewBtn');
 const previewBox = document.getElementById('previewBox');
 const embedPreview = document.getElementById('embedPreview');
 
+const colorMap = {
+    "ถาวร": { emoji: "🔴", hex: 0xFF0000, color: "red" },
+    "ใบแดง": { emoji: "🔴", hex: 0xFF0000, color: "red" },
+    "ใบส้ม": { emoji: "🟠", hex: 0xFFA500, color: "orange" },
+    "ใบเหลือง": { emoji: "🟡", hex: 0xFFFF00, color: "yellow" },
+    "ปรับ": { emoji: "💸", hex: 0x00FF00, color: "green" }
+};
+
 function updatePreview() {
     const name = document.getElementById('name').value;
     const discord = document.getElementById('discord').value;
@@ -198,24 +197,8 @@ function updatePreview() {
     const admin = document.getElementById('admin').value;
     const banType = document.getElementById('banType').value;
 
-    const colorMap = {
-        "ถาวร": "🔴",
-        "ใบแดง": "🔴",
-        "ใบส้ม": "🟠",
-        "ใบเหลือง": "🟡",
-        "ปรับ": "💸"
-    };
-
-    const colorStyleMap = {
-        "ถาวร": "red",
-        "ใบแดง": "red",
-        "ใบส้ม": "orange",
-        "ใบเหลือง": "yellow",
-        "ปรับ": "green"
-    };
-
     embedPreview.innerHTML = `
-        <p>${colorMap[banType]} ประกาศใบ <span style="color:${colorStyleMap[banType]};"><strong>${banType}</strong></span></p>
+        <p>${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color};"><strong>${banType}</strong></span></p>
         <p>💠 ฝ่าฝืนกฎของ Midnight Racing</p>
         <p>👤 Name: <strong>${name}</strong></p>
         <p>🆔 Discord: <strong>@${discord}</strong></p>
@@ -242,17 +225,24 @@ form.addEventListener('submit', async (e) => {
     const admin = document.getElementById('admin').value;
     const banType = document.getElementById('banType').value;
 
-    const colorMap = {
-        "ถาวร": "🔴",
-        "ใบแดง": "🔴",
-        "ใบส้ม": "🟠",
-        "ใบเหลือง": "🟡",
-        "ปรับ": "💸"
-    };
-
-    // Discord payload as content string (เหมือน Embed แบบหน้าเว็บ)
     const payload = {
-        content: `${colorMap[banType]} ประกาศใบ ${banType}\n💠 ฝ่าฝืนกฎของ PLAY COMMUNITY\n👤 Name: ${name}\n🆔 Discord: @${discord}\n🖥 SteamHex: ${steam}\n📄 Reason: ${reason}\n💰 ค่าปรับ: ${fine}\nประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | โดย [${admin}] MR System `
+        embeds: [{
+            title: `${colorMap[banType].emoji} ประกาศใบ ${banType}`,
+            color: colorMap[banType].hex,
+            thumbnail: {
+                // ใช้ default avatar ของ Discord ตาม ID
+                url: `https://cdn.discordapp.com/embed/avatars/${parseInt(discord) % 5}.png`
+            },
+            fields: [
+                { name: "👤 Name", value: name, inline: true },
+                { name: "🆔 Discord", value: `@${discord}`, inline: true },
+                { name: "🖥 SteamHex", value: steam, inline: true },
+                { name: "📄 Reason", value: reason, inline: false },
+                { name: "💰 ค่าปรับ", value: fine, inline: true },
+                { name: "🛡 ผู้แบน", value: admin, inline: true }
+            ],
+            timestamp: new Date()
+        }]
     };
 
     try {
@@ -262,7 +252,7 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify(payload)
         });
         if(response.ok){
-            alert("✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!");
+            alert("✅ ส่ง Embed ไป Discord เรียบร้อยแล้ว!");
             form.reset();
             previewBox.style.display = 'none';
         } else {
