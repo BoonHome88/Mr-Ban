@@ -5,155 +5,140 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>📢 ระบบประกาศแบน | Midnight Racing</title>
 <style>
-    :root {
-        --primary-color: #4a90e2;
-        --secondary-color: #f5f6fa;
-        --bg-color: #f5f6fa;
-        --card-color: #ffffff;
-        --text-dark: #2d3436;
-        --text-gray: #636e72;
-        --input-bg: #f0f0f0;
-        --input-border: #dcdde1;
-        --button-hover: #357ab7;
-        --card-width: 420px;
-    }
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f5f6fa;
+    --bg-color: #f5f6fa;
+    --card-color: #ffffff;
+    --text-dark: #2d3436;
+    --text-gray: #636e72;
+    --input-bg: #f0f0f0;
+    --input-border: #dcdde1;
+    --button-hover: #357ab7;
+    --card-width: 420px;
+}
 
-    body {
-        background-color: var(--bg-color);
-        font-family: 'Segoe UI', sans-serif;
-        margin: 0;
-        padding: 40px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-    }
+body {
+    background-color: var(--bg-color);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
 
-    h2 {
-        text-align: center;
-        color: var(--primary-color);
-        margin-bottom: 20px;
-        font-size: 1.8rem;
-    }
+h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
 
-    .card {
-        background: var(--card-color);
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-        padding: 30px 25px;
-        width: var(--card-width);
-        max-width: 100%;
-        transition: all 0.3s ease;
-    }
+.card {
+    background: var(--card-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    padding: 30px 25px;
+    width: var(--card-width);
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
 
-    .card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-    }
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
 
-    label {
-        display: block;
-        font-size: 0.95rem;
-        color: var(--text-gray);
-        margin-top: 15px;
-    }
+label {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text-gray);
+    margin-top: 15px;
+}
 
-    input, textarea, select {
-        width: 100%;
-        padding: 12px 15px;
-        margin-top: 5px;
-        border: 1px solid var(--input-border);
-        border-radius: 10px;
-        background: var(--input-bg);
-        color: var(--text-dark);
-        font-size: 0.95rem;
-        outline: none;
-        transition: border 0.3s;
-        box-sizing: border-box;
-    }
+input, textarea, select {
+    width: 100%;
+    padding: 12px 15px;
+    margin-top: 5px;
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    background: var(--input-bg);
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.3s;
+    box-sizing: border-box;
+}
 
-    input:focus, textarea:focus, select:focus {
-        border-color: var(--primary-color);
-    }
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary-color);
+}
 
-    textarea { resize: vertical; }
+textarea { resize: vertical; }
 
-    button {
-        width: 100%;
-        padding: 12px;
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        margin-top: 20px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s ease, transform 0.2s;
-        box-sizing: border-box;
-    }
+button {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s;
+    box-sizing: border-box;
+}
 
-    button:hover {
-        background: var(--button-hover);
-        transform: scale(1.03);
-    }
+button:hover {
+    background: var(--button-hover);
+    transform: scale(1.03);
+}
 
-    .preview {
-        background: var(--card-color);
-        border-radius: 12px;
-        padding: 25px;
-        width: calc(var(--card-width) + 20px);
-        max-width: 100%;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    }
+.preview {
+    background: var(--card-color);
+    border-radius: 12px;
+    padding: 25px;
+    width: calc(var(--card-width) + 20px);
+    max-width: 100%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
 
-    .embed {
-        background-color: #f0f0f0;
-        border-left: 5px solid var(--primary-color);
-        border-radius: 8px;
-        padding: 15px 15px 15px 20px;
-        position: relative;
-        min-height: 80px;
-        box-sizing: border-box;
-    }
+.embed {
+    background-color: #f0f0f0;
+    border-left: 5px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 15px 15px 15px 20px;
+    position: relative;
+    min-height: 80px;
+    box-sizing: border-box;
+}
 
-    .embed .avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        object-fit: cover;
-    }
+.embed .title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
 
-    .embed .title {
-        font-weight: bold;
-        font-size: 1.1rem;
-        color: var(--primary-color);
-    }
+.embed p, .embed .embed-field {
+    margin-top: 6px;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    word-wrap: break-word;
+}
 
-    .embed p {
-        margin-top: 6px;
-        color: var(--text-dark);
-        font-size: 0.9rem;
-        word-wrap: break-word;
-    }
+.embed-field-name {
+    color: var(--primary-color);
+    font-weight: bold;
+}
 
-    .embed-field {
-        margin-top: 10px;
-        font-size: 0.9rem;
+@media (max-width: 500px) {
+    .card, .preview {
+        width: 95%;
     }
-
-    .embed-field-name {
-        color: var(--primary-color);
-        font-weight: bold;
-    }
-
-    @media (max-width: 500px) {
-        .card, .preview {
-            width: 95%;
-        }
-    }
+}
 </style>
 </head>
 <body>
@@ -199,46 +184,84 @@
 </div>
 
 <script>
-    // ตัวอย่าง JavaScript สำหรับแสดง Embed Preview
-    const previewBtn = document.getElementById('previewBtn');
-    const previewBox = document.getElementById('previewBox');
-    const embedPreview = document.getElementById('embedPreview');
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB"; // ใส่ Webhook ของ Discord
 
-    previewBtn.addEventListener('click', () => {
-        const name = document.getElementById('name').value;
-        const discord = document.getElementById('discord').value;
-        const steam = document.getElementById('steamhex').value;
-        const reason = document.getElementById('reason').value;
-        const fine = document.getElementById('fine').value;
-        const admin = document.getElementById('admin').value;
-        const banType = document.getElementById('banType').value;
+const form = document.getElementById('banForm');
+const previewBtn = document.getElementById('previewBtn');
+const previewBox = document.getElementById('previewBox');
+const embedPreview = document.getElementById('embedPreview');
 
-        embedPreview.innerHTML = `
-            <div class="embed-field">
-                <span class="embed-field-name">ประเภท:</span> ${banType}
-            </div>
-            <div class="embed-field">
-                <span class="embed-field-name">ชื่อในเกม:</span> ${name}
-            </div>
-            <div class="embed-field">
-                <span class="embed-field-name">Discord ID:</span> ${discord}
-            </div>
-            <div class="embed-field">
-                <span class="embed-field-name">Steam Hex:</span> ${steam}
-            </div>
-            <div class="embed-field">
-                <span class="embed-field-name">เหตุผล:</span> ${reason}
-            </div>
-            <div class="embed-field">
-                <span class="embed-field-name">ค่าปรับ:</span> ${fine}
-            </div>
-            <div class="embed-field">
-                <span class="embed-field-name">ผู้แบน:</span> ${admin}
-            </div>
-        `;
-        previewBox.style.display = 'block';
-        previewBox.scrollIntoView({ behavior: 'smooth' });
-    });
+function updatePreview() {
+    const name = document.getElementById('name').value;
+    const discord = document.getElementById('discord').value;
+    const steam = document.getElementById('steamhex').value;
+    const reason = document.getElementById('reason').value;
+    const fine = document.getElementById('fine').value;
+    const admin = document.getElementById('admin').value;
+    const banType = document.getElementById('banType').value;
+
+    embedPreview.innerHTML = `
+        <div class="embed-field"><span class="embed-field-name">ประเภท:</span> ${banType}</div>
+        <div class="embed-field"><span class="embed-field-name">ชื่อในเกม:</span> ${name}</div>
+        <div class="embed-field"><span class="embed-field-name">Discord ID:</span> ${discord}</div>
+        <div class="embed-field"><span class="embed-field-name">Steam Hex:</span> ${steam}</div>
+        <div class="embed-field"><span class="embed-field-name">เหตุผล:</span> ${reason}</div>
+        <div class="embed-field"><span class="embed-field-name">ค่าปรับ:</span> ${fine}</div>
+        <div class="embed-field"><span class="embed-field-name">ผู้แบน:</span> ${admin}</div>
+    `;
+    previewBox.style.display = 'block';
+    previewBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+previewBtn.addEventListener('click', updatePreview);
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    updatePreview();
+
+    const name = document.getElementById('name').value;
+    const discord = document.getElementById('discord').value;
+    const steam = document.getElementById('steamhex').value;
+    const reason = document.getElementById('reason').value;
+    const fine = document.getElementById('fine').value;
+    const admin = document.getElementById('admin').value;
+    const banType = document.getElementById('banType').value;
+
+    const payload = {
+        embeds: [{
+            title: "📢 ประกาศแบน",
+            color: 16711680,
+            fields: [
+                { name: "ประเภท", value: banType, inline: true },
+                { name: "ชื่อในเกม", value: name, inline: true },
+                { name: "Discord ID", value: discord, inline: true },
+                { name: "Steam Hex", value: steam, inline: true },
+                { name: "เหตุผล", value: reason, inline: false },
+                { name: "ค่าปรับ", value: fine, inline: true },
+                { name: "ผู้แบน", value: admin, inline: true },
+            ],
+            timestamp: new Date()
+        }]
+    };
+
+    try {
+        const response = await fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if(response.ok){
+            alert("✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!");
+            form.reset();
+            previewBox.style.display = 'none';
+        } else {
+            alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อ Discord");
+    }
+});
 </script>
 </body>
 </html>
