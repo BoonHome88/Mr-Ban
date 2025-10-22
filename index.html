@@ -92,13 +92,13 @@ button:hover { background: var(--button-hover); transform: scale(1.03); }
 }
 
 .embed {
-    background-color: #f0f0f0;
-    border-left: 5px solid var(--primary-color);
+    border-left: 6px solid var(--primary-color);
     border-radius: 8px;
-    padding: 15px 15px 15px 20px;
+    padding: 15px 20px;
     position: relative;
     min-height: 80px;
     box-sizing: border-box;
+    background: #f0f0f0;
 }
 
 .embed-header {
@@ -120,22 +120,9 @@ button:hover { background: var(--button-hover); transform: scale(1.03); }
     color: var(--primary-color);
 }
 
-.embed-field {
-    background: #fff;
-    border-radius: 8px;
-    padding: 10px 12px;
-    margin: 6px 0;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.embed-field-name {
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
 .embed-field-value {
     color: var(--text-dark);
-    word-wrap: break-word;
+    line-height: 1.7em;
 }
 
 .embed-footer {
@@ -226,39 +213,26 @@ async function updatePreview() {
     const fine = document.getElementById('fine').value;
     const admin = document.getElementById('admin').value;
     const banType = document.getElementById('banType').value;
-
     const avatarUrl = await getDiscordAvatar(discord);
 
+    const color = colorMap[banType].color;
+
+    embedPreview.style.borderLeft = `6px solid ${color}`;
     embedPreview.innerHTML = `
         <div class="embed-header">
             <img src="${avatarUrl}" class="avatar">
-            <h3>${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color}">${banType}</span></h3>
+            <h3>${colorMap[banType].emoji} ประกาศใบ <span style="color:${color}">${banType}</span></h3>
         </div>
-        <div class="embed-field">
-            <div class="embed-field-name">Name</div>
-            <div class="embed-field-value">${name}</div>
+        <div class="embed-field-value">
+            📢 ประเภท: ${banType}<br>
+            👤 ชื่อในเกม: ${name}<br>
+            💬 Discord ID: ${discord}<br>
+            🎮 Steam Hex: ${steam}<br>
+            ⚠️ เหตุผล: ${reason}<br>
+            💸 ค่าปรับ: ${fine}<br>
+            👮‍♂️ ผู้แบน: ${admin}
         </div>
-        <div class="embed-field">
-            <div class="embed-field-name">Discord ID</div>
-            <div class="embed-field-value">@${discord}</div>
-        </div>
-        <div class="embed-field">
-            <div class="embed-field-name">Steam Hex</div>
-            <div class="embed-field-value">${steam}</div>
-        </div>
-        <div class="embed-field">
-            <div class="embed-field-name">Reason</div>
-            <div class="embed-field-value">${reason}</div>
-        </div>
-        <div class="embed-field">
-            <div class="embed-field-name">ค่าปรับ</div>
-            <div class="embed-field-value">${fine}</div>
-        </div>
-        <div class="embed-field">
-            <div class="embed-field-name">ผู้แบน</div>
-            <div class="embed-field-value">${admin}</div>
-        </div>
-        <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | โดย [${admin}] MR System</div>
+        <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')}</div>
     `;
     previewBox.style.display = 'block';
     previewBox.scrollIntoView({ behavior: 'smooth' });
@@ -279,21 +253,24 @@ form.addEventListener('submit', async (e) => {
     const banType = document.getElementById('banType').value;
     const avatarUrl = await getDiscordAvatar(discord);
 
+    const fieldValue = 
+`📢 ประเภท: ${banType}
+👤 ชื่อในเกม: ${name}
+💬 Discord ID: ${discord}
+🎮 Steam Hex: ${steam}
+⚠️ เหตุผล: ${reason}
+💸 ค่าปรับ: ${fine}
+👮‍♂️ ผู้แบน: ${admin}`;
+
     const payload = {
         embeds: [{
-            title: "📢 ประกาศแบน",
+            title: `${colorMap[banType].emoji} ประกาศใบ ${banType}`,
             color: colorMap[banType].hex,
             thumbnail: { url: avatarUrl },
             fields: [
-                { name: "ประเภท", value: banType, inline: true },
-                { name: "ชื่อในเกม", value: name, inline: true },
-                { name: "Discord ID", value: discord, inline: true },
-                { name: "Steam Hex", value: steam, inline: true },
-                { name: "เหตุผล", value: reason, inline: false },
-                { name: "ค่าปรับ", value: fine, inline: true },
-                { name: "ผู้แบน", value: admin, inline: true }
+                { name: "รายละเอียด", value: fieldValue, inline: false }
             ],
-            timestamp: new Date()
+            footer: { text: `ประกาศเมื่อ ${new Date().toLocaleString('th-TH')} | MR System` }
         }]
     };
 
@@ -303,7 +280,7 @@ form.addEventListener('submit', async (e) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        if(response.ok){
+        if (response.ok) {
             alert("✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!");
             form.reset();
             previewBox.style.display = 'none';
