@@ -1,4 +1,190 @@
-<!-- ...ส่วน head และ CSS ของคุณเหมือนเดิม... -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📢 ระบบประกาศแบน | Midnight Racing</title>
+
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #f5f6fa;
+      --bg-color: #f5f6fa;
+      --card-color: #ffffff;
+      --text-dark: #2d3436;
+      --text-gray: #636e72;
+      --input-bg: #f0f0f0;
+      --input-border: #dcdde1;
+      --button-hover: #357ab7;
+      --card-width: 420px;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    .card {
+      background: var(--card-color);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      padding: 30px 25px;
+      width: var(--card-width);
+      max-width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    label {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--text-gray);
+      margin-top: 15px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 5px;
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      background: var(--input-bg);
+      color: var(--text-dark);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.3s;
+      box-sizing: border-box;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--primary-color);
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s;
+      box-sizing: border-box;
+    }
+
+    button:hover {
+      background: var(--button-hover);
+      transform: scale(1.03);
+    }
+
+    .preview {
+      background: var(--card-color);
+      border-radius: 12px;
+      padding: 25px;
+      width: calc(var(--card-width) + 20px);
+      max-width: 100%;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .embed {
+      background-color: #f0f0f0;
+      border-left: 5px solid var(--primary-color);
+      border-radius: 8px;
+      padding: 15px 15px 15px 20px;
+      position: relative;
+      min-height: 80px;
+      box-sizing: border-box;
+    }
+
+    .embed-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .embed-header img.avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+
+    .embed-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+    }
+
+    .embed-field {
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 6px 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .embed-field-name {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .embed-field-value {
+      color: var(--text-dark);
+      word-wrap: break-word;
+    }
+
+    .embed-footer {
+      font-size: 0.8rem;
+      color: gray;
+      margin-top: 10px;
+    }
+
+    #discordInfo {
+      margin-top: 10px;
+    }
+
+    @media (max-width: 500px) {
+      .card,
+      .preview {
+        width: 95%;
+      }
+    }
+
+    footer {
+      margin-top: 20px;
+      color: #888;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+  </style>
+</head>
 
 <body>
   <div class="card">
@@ -19,7 +205,7 @@
       <label>Discord ID</label>
       <input type="text" id="discord" required placeholder="ตัวเลข ID Discord" />
       <button type="button" id="lookupBtn">🔍 ตรวจสอบ Discord ID</button>
-      <div id="discordInfo" style="margin-top:10px;"></div>
+      <div id="discordInfo"></div>
 
       <label>Steam Hex</label>
       <input type="text" id="steamhex" placeholder="steam:1100001xxxxxxx" required />
@@ -46,7 +232,6 @@
   <script>
     const DISCORD_WEBHOOK_URL =
       "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
-    const BACKEND_URL = "https://mr-ban-production.up.railway.app";
 
     const form = document.getElementById("banForm");
     const previewBtn = document.getElementById("previewBtn");
@@ -63,45 +248,26 @@
       "ปรับ": { emoji: "💸", hex: 0x00ff00, color: "green" },
     };
 
-    async function getDiscordAvatar(discordId) {
-      try {
-        const res = await fetch(`${BACKEND_URL}/${discordId}`);
-        const data = await res.json();
-        return data.avatar;
-      } catch {
-        return `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
-      }
+    function getDiscordAvatar(discordId) {
+      // ใช้ fallback avatar public
+      return `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
     }
 
-    async function lookupDiscordUser() {
+    function lookupDiscordUser() {
       const discordId = document.getElementById("discord").value.trim();
       if (!discordId) return alert("กรุณาใส่ Discord ID");
 
-      try {
-        const res = await fetch(`https://discord.com/api/v10/users/${discordId}`, {
-          headers: { Authorization: "Bot YOUR_BOT_TOKEN_HERE" }
-        });
-
-        if (!res.ok) throw new Error("ไม่สามารถดึงข้อมูลได้");
-
-        const data = await res.json();
-        const avatarUrl = data.avatar
-          ? `https://cdn.discordapp.com/avatars/${discordId}/${data.avatar}.png?size=128`
-          : `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
-
-        discordInfo.innerHTML = `
-          <div style="display:flex;align-items:center;gap:10px;">
-            <img src="${avatarUrl}" width="48" height="48" style="border-radius:50%;border:2px solid #7289da;">
-            <div>
-              <div><strong>Username:</strong> ${data.username}#${data.discriminator}</div>
-              <div><strong>Bot:</strong> ${data.bot ? "ใช่" : "ไม่ใช่"}</div>
-            </div>
+      // แสดงข้อมูลตัวอย่างแบบ fallback
+      const avatarUrl = getDiscordAvatar(discordId);
+      discordInfo.innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px;">
+          <img src="${avatarUrl}" width="48" height="48" style="border-radius:50%;border:2px solid #7289da;">
+          <div>
+            <div><strong>Username:</strong> ID ${discordId}</div>
+            <div><strong>Bot:</strong> ไม่ทราบ</div>
           </div>
-        `;
-      } catch (error) {
-        console.error(error);
-        discordInfo.innerHTML = `<span style="color:red;">❌ ไม่พบผู้ใช้หรือ Discord Bot Token ไม่ถูกต้อง</span>`;
-      }
+        </div>
+      `;
     }
 
     lookupBtn.addEventListener("click", lookupDiscordUser);
@@ -114,7 +280,7 @@
       const fine = document.getElementById("fine").value;
       const admin = document.getElementById("admin").value;
       const banType = document.getElementById("banType").value;
-      const avatarUrl = await getDiscordAvatar(discord);
+      const avatarUrl = getDiscordAvatar(discord);
 
       embedPreview.innerHTML = `
         <div class="embed-header">
@@ -147,7 +313,7 @@
       const fine = document.getElementById("fine").value;
       const admin = document.getElementById("admin").value;
       const banType = document.getElementById("banType").value;
-      const avatarUrl = await getDiscordAvatar(discord);
+      const avatarUrl = getDiscordAvatar(discord);
 
       const payload = {
         embeds: [
