@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>📢 ระบบประกาศแบน | Midnight Racing</title>
-
   <style>
     :root {
       --primary-color: #4a90e2;
@@ -30,12 +29,7 @@
       gap: 30px;
     }
 
-    h2 {
-      text-align: center;
-      color: var(--primary-color);
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-    }
+    h2 { text-align: center; color: var(--primary-color); margin-bottom: 20px; font-size: 1.8rem; }
 
     .card {
       background: var(--card-color);
@@ -52,137 +46,47 @@
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
     }
 
-    label {
-      display: block;
-      font-size: 0.95rem;
-      color: var(--text-gray);
-      margin-top: 15px;
+    label { display: block; font-size: 0.95rem; color: var(--text-gray); margin-top: 15px; }
+
+    input, textarea, select {
+      width: 100%; padding: 12px 15px; margin-top: 5px; border: 1px solid var(--input-border);
+      border-radius: 10px; background: var(--input-bg); color: var(--text-dark); font-size: 0.95rem;
+      outline: none; transition: border 0.3s; box-sizing: border-box;
     }
 
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 12px 15px;
-      margin-top: 5px;
-      border: 1px solid var(--input-border);
-      border-radius: 10px;
-      background: var(--input-bg);
-      color: var(--text-dark);
-      font-size: 0.95rem;
-      outline: none;
-      transition: border 0.3s;
-      box-sizing: border-box;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: var(--primary-color);
-    }
-
-    textarea {
-      resize: vertical;
-    }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary-color); }
+    textarea { resize: vertical; }
 
     button {
-      width: 100%;
-      padding: 12px;
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      margin-top: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s;
-      box-sizing: border-box;
+      width: 100%; padding: 12px; background: var(--primary-color); color: white;
+      border: none; border-radius: 10px; margin-top: 20px; font-weight: 600;
+      cursor: pointer; transition: background 0.3s ease, transform 0.2s; box-sizing: border-box;
     }
+    button:hover { background: var(--button-hover); transform: scale(1.03); }
 
-    button:hover {
-      background: var(--button-hover);
-      transform: scale(1.03);
-    }
-
-    .preview {
-      background: var(--card-color);
-      border-radius: 12px;
-      padding: 25px;
-      width: calc(var(--card-width) + 20px);
-      max-width: 100%;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    }
+    .preview { background: var(--card-color); border-radius: 12px; padding: 25px; width: calc(var(--card-width) + 20px);
+      max-width: 100%; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); }
 
     .embed {
-      background-color: #f0f0f0;
-      border-left: 5px solid var(--primary-color);
-      border-radius: 8px;
-      padding: 15px 15px 15px 20px;
-      position: relative;
-      min-height: 80px;
-      box-sizing: border-box;
+      background-color: #f0f0f0; border-left: 5px solid var(--primary-color); border-radius: 8px;
+      padding: 15px 15px 15px 20px; position: relative; min-height: 80px; box-sizing: border-box;
     }
 
-    .embed-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 12px;
-    }
+    .embed-header { display: flex; align-items: center; margin-bottom: 12px; }
+    .embed-header img.avatar { width: 48px; height: 48px; border-radius: 50%; margin-right: 12px; }
+    .embed-header h3 { margin: 0; font-size: 1.1rem; color: var(--primary-color); }
 
-    .embed-header img.avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      margin-right: 12px;
-    }
+    .embed-field { background: #fff; border-radius: 8px; padding: 10px 12px; margin: 6px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .embed-field-name { font-weight: bold; margin-bottom: 4px; }
+    .embed-field-value { color: var(--text-dark); word-wrap: break-word; }
 
-    .embed-header h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: var(--primary-color);
-    }
+    .embed-footer { font-size: 0.8rem; color: gray; margin-top: 10px; }
 
-    .embed-field {
-      background: #fff;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 6px 0;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
+    #discordInfo { margin-top: 10px; }
 
-    .embed-field-name {
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
+    @media (max-width: 500px) { .card, .preview { width: 95%; } }
 
-    .embed-field-value {
-      color: var(--text-dark);
-      word-wrap: break-word;
-    }
-
-    .embed-footer {
-      font-size: 0.8rem;
-      color: gray;
-      margin-top: 10px;
-    }
-
-    #discordInfo {
-      margin-top: 10px;
-    }
-
-    @media (max-width: 500px) {
-      .card,
-      .preview {
-        width: 95%;
-      }
-    }
-
-    footer {
-      margin-top: 20px;
-      color: #888;
-      font-size: 0.85rem;
-      text-align: center;
-    }
+    footer { margin-top: 20px; color: #888; font-size: 0.85rem; text-align: center; }
   </style>
 </head>
 
@@ -230,8 +134,7 @@
   </div>
 
   <script>
-    const DISCORD_WEBHOOK_URL =
-      "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
+    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
 
     const form = document.getElementById("banForm");
     const previewBtn = document.getElementById("previewBtn");
@@ -248,23 +151,23 @@
       "ปรับ": { emoji: "💸", hex: 0x00ff00, color: "green" },
     };
 
-    function getDiscordAvatar(discordId) {
-      // ใช้ fallback avatar public
-      return `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
+    // ฟังก์ชันดึง Avatar จาก Discord ID แบบ public
+    function getDiscordAvatar(id) {
+      return `https://cdn.discordapp.com/embed/avatars/${id % 5}.png`;
     }
 
+    // ฟังก์ชัน Lookup Discord User (Fallback แบบ public)
     function lookupDiscordUser() {
       const discordId = document.getElementById("discord").value.trim();
       if (!discordId) return alert("กรุณาใส่ Discord ID");
 
-      // แสดงข้อมูลตัวอย่างแบบ fallback
       const avatarUrl = getDiscordAvatar(discordId);
       discordInfo.innerHTML = `
         <div style="display:flex;align-items:center;gap:10px;">
           <img src="${avatarUrl}" width="48" height="48" style="border-radius:50%;border:2px solid #7289da;">
           <div>
-            <div><strong>Username:</strong> ID ${discordId}</div>
-            <div><strong>Bot:</strong> ไม่ทราบ</div>
+            <div><strong>Username:</strong> User#${discordId.slice(-4)}</div>
+            <div><strong>ID:</strong> ${discordId}</div>
           </div>
         </div>
       `;
@@ -316,23 +219,21 @@
       const avatarUrl = getDiscordAvatar(discord);
 
       const payload = {
-        embeds: [
-          {
-            title: "📢 ประกาศแบน",
-            color: colorMap[banType].hex,
-            thumbnail: { url: avatarUrl },
-            fields: [
-              { name: "ประเภท", value: banType, inline: true },
-              { name: "ชื่อในเกม", value: name, inline: true },
-              { name: "Discord ID", value: discord, inline: true },
-              { name: "Steam Hex", value: steam, inline: true },
-              { name: "เหตุผล", value: reason, inline: false },
-              { name: "ค่าปรับ", value: fine, inline: true },
-              { name: "ผู้แบน", value: admin, inline: true },
-            ],
-            timestamp: new Date(),
-          },
-        ],
+        embeds: [{
+          title: "📢 ประกาศแบน",
+          color: colorMap[banType].hex,
+          thumbnail: { url: avatarUrl },
+          fields: [
+            { name: "ประเภท", value: banType, inline: true },
+            { name: "ชื่อในเกม", value: name, inline: true },
+            { name: "Discord ID", value: discord, inline: true },
+            { name: "Steam Hex", value: steam, inline: true },
+            { name: "เหตุผล", value: reason, inline: false },
+            { name: "ค่าปรับ", value: fine, inline: true },
+            { name: "ผู้แบน", value: admin, inline: true }
+          ],
+          timestamp: new Date(),
+        }]
       };
 
       try {
