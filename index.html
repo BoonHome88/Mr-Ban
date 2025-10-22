@@ -1,115 +1,249 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📢 ระบบประกาศแบน | Midnight Racing</title>
+<style>
+    :root {
+        --primary-color: #4a90e2;
+        --bg-color: #1e1e1e;
+        --card-color: #2b2b2b;
+        --text-color: #ffffff;
+        --accent-color: #ff4444;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    h1 {
+        margin-top: 40px;
+        color: var(--primary-color);
+    }
+
+    form {
+        background-color: var(--card-color);
+        padding: 20px 25px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        width: 90%;
+        max-width: 500px;
+        margin-bottom: 30px;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: 600;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        background: #333;
+        color: #fff;
+    }
+
+    button {
+        width: 100%;
+        background: var(--primary-color);
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        padding: 12px;
+        margin-top: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: #357ABD;
+    }
+
+    .preview {
+        background: #2f3136;
+        padding: 16px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        color: #dcddde;
+    }
+
+    .embed-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .embed-header img {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        margin-left: auto;
+    }
+
+    .field {
+        margin: 5px 0;
+    }
+
+    footer {
+        margin-top: auto;
+        padding: 10px;
+        color: #aaa;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+
+<h1>📢 ระบบประกาศแบน</h1>
+
+<form id="banForm">
+    <label>ประเภท</label>
+    <select id="banType">
+        <option value="ถาวร">ถาวร</option>
+        <option value="ชั่วคราว">ชั่วคราว</option>
+    </select>
+
+    <label>ชื่อในเกม</label>
+    <input type="text" id="name" required>
+
+    <label>Discord ID</label>
+    <input type="text" id="discord" required>
+
+    <label>Steam Hex</label>
+    <input type="text" id="steam" required>
+
+    <label>เหตุผล</label>
+    <textarea id="reason" rows="3" required></textarea>
+
+    <label>ค่าปรับ</label>
+    <input type="text" id="fine" required>
+
+    <label>ผู้แบน</label>
+    <input type="text" id="admin" required>
+
+    <button type="submit">ส่งประกาศ</button>
+</form>
+
+<div class="preview" id="previewBox">
+    <div class="embed-header">
+        <h3>📢 ประกาศแบน</h3>
+        <img id="avatarPreview" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar">
+    </div>
+    <div id="embedContent">
+        <div class="field"><b>ประเภท:</b> -</div>
+        <div class="field"><b>ชื่อในเกม:</b> -</div>
+        <div class="field"><b>Discord ID:</b> -</div>
+        <div class="field"><b>Steam Hex:</b> -</div>
+        <div class="field"><b>เหตุผล:</b> -</div>
+        <div class="field"><b>ค่าปรับ:</b> -</div>
+        <div class="field"><b>ผู้แบน:</b> -</div>
+    </div>
+</div>
+
+<footer>© 2025 Midnight Racing | ระบบประกาศแบน</footer>
+
 <script>
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
-const BACKEND_URL = "https://mr-ban-production.up.railway.app";
+const BACKEND_URL = "https://your-railway-url.up.railway.app"; // 🔧 แก้เป็น URL Backend ของคุณ
+const WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL_HERE"; // 🔧 แก้เป็น Webhook Discord จริง
 
-const form = document.getElementById('banForm');
-const previewBtn = document.getElementById('previewBtn');
-const previewBox = document.getElementById('previewBox');
-const embedPreview = document.getElementById('embedPreview');
+const form = document.getElementById("banForm");
+const preview = document.getElementById("embedContent");
+const avatarImg = document.getElementById("avatarPreview");
 
-const colorMap = {
-    "ถาวร": { emoji: "🔴", hex: 0xFF0000, color: "red" },
-    "ใบแดง": { emoji: "🔴", hex: 0xFF0000, color: "red" },
-    "ใบส้ม": { emoji: "🟠", hex: 0xFFA500, color: "orange" },
-    "ใบเหลือง": { emoji: "🟡", hex: 0xFFFF00, color: "yellow" },
-    "ปรับ": { emoji: "💸", hex: 0x00FF00, color: "green" }
-};
+form.addEventListener("input", updatePreview);
+form.addEventListener("submit", sendWebhook);
 
-async function getDiscordAvatar(discordId) {
+async function getAvatar(discordId) {
     try {
         const res = await fetch(`${BACKEND_URL}/${discordId}`);
         const data = await res.json();
-        return data.avatar;
+        if (data.avatar) return data.avatar;
+        return `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
     } catch {
         return `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
     }
 }
 
 async function updatePreview() {
-    const name = document.getElementById('name').value;
-    const discord = document.getElementById('discord').value;
-    const steam = document.getElementById('steamhex').value;
-    const reason = document.getElementById('reason').value;
-    const fine = document.getElementById('fine').value;
-    const admin = document.getElementById('admin').value;
-    const banType = document.getElementById('banType').value;
+    const name = document.getElementById("name").value || "-";
+    const discord = document.getElementById("discord").value || "-";
+    const steam = document.getElementById("steam").value || "-";
+    const reason = document.getElementById("reason").value || "-";
+    const fine = document.getElementById("fine").value || "-";
+    const admin = document.getElementById("admin").value || "-";
+    const banType = document.getElementById("banType").value;
 
-    const avatarUrl = await getDiscordAvatar(discord);
-
-    embedPreview.innerHTML = `
-        <div class="embed-header">
-            <img src="${avatarUrl}" class="avatar">
-            <h3>${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color}">${banType}</span></h3>
-        </div>
-        <div class="embed-field">
-            <div class="embed-field-value">
-                📢 ประเภท: ${banType}<br>
-                👤 ชื่อในเกม: ${name}<br>
-                💬 Discord ID: ${discord}<br>
-                🎮 Steam Hex: ${steam}<br>
-                ⚠️ เหตุผล: ${reason}<br>
-                💸 ค่าปรับ: ${fine}<br>
-                👮‍♂️ ผู้แบน: ${admin}
-            </div>
-        </div>
-        <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')}</div>
+    preview.innerHTML = `
+        <div class="field"><b>ประเภท:</b> ${banType}</div>
+        <div class="field"><b>ชื่อในเกม:</b> ${name}</div>
+        <div class="field"><b>Discord ID:</b> ${discord}</div>
+        <div class="field"><b>Steam Hex:</b> ${steam}</div>
+        <div class="field"><b>เหตุผล:</b> ${reason}</div>
+        <div class="field"><b>ค่าปรับ:</b> ${fine}</div>
+        <div class="field"><b>ผู้แบน:</b> ${admin}</div>
     `;
-    previewBox.style.display = 'block';
-    previewBox.scrollIntoView({ behavior: 'smooth' });
+
+    if (discord && discord.length > 10) {
+        avatarImg.src = await getAvatar(discord);
+    }
 }
 
-previewBtn.addEventListener('click', updatePreview);
-
-form.addEventListener('submit', async (e) => {
+async function sendWebhook(e) {
     e.preventDefault();
-    await updatePreview();
+    const banType = document.getElementById("banType").value;
+    const name = document.getElementById("name").value;
+    const discord = document.getElementById("discord").value;
+    const steam = document.getElementById("steam").value;
+    const reason = document.getElementById("reason").value;
+    const fine = document.getElementById("fine").value;
+    const admin = document.getElementById("admin").value;
 
-    const name = document.getElementById('name').value;
-    const discord = document.getElementById('discord').value;
-    const steam = document.getElementById('steamhex').value;
-    const reason = document.getElementById('reason').value;
-    const fine = document.getElementById('fine').value;
-    const admin = document.getElementById('admin').value;
-    const banType = document.getElementById('banType').value;
-    const avatarUrl = await getDiscordAvatar(discord);
-
-    const fieldValue = 
-`📢 ประเภท: ${banType}
-👤 ชื่อในเกม: ${name}
-💬 Discord ID: ${discord}
-🎮 Steam Hex: ${steam}
-⚠️ เหตุผล: ${reason}
-💸 ค่าปรับ: ${fine}
-👮‍♂️ ผู้แบน: ${admin}`;
+    const avatarUrl = await getAvatar(discord);
 
     const payload = {
         embeds: [{
             title: "📢 ประกาศแบน",
-            color: colorMap[banType].hex,
+            color: banType === "ถาวร" ? 0xff0000 : 0xffa500,
             thumbnail: { url: avatarUrl },
             fields: [
-                { name: "รายละเอียด", value: fieldValue, inline: false }
-            ],
-            footer: { text: `ประกาศเมื่อ ${new Date().toLocaleString('th-TH')}` }
+                { name: "ประเภท", value: banType, inline: true },
+                { name: "ชื่อในเกม", value: name, inline: true },
+                { name: "Discord ID", value: discord, inline: true },
+                { name: "Steam Hex", value: steam, inline: false },
+                { name: "เหตุผล", value: reason, inline: false },
+                { name: "ค่าปรับ", value: fine, inline: true },
+                { name: "ผู้แบน", value: admin, inline: true },
+                { name: "วันที่", value: new Date().toLocaleString('th-TH'), inline: false }
+            ]
         }]
     };
 
-    try {
-        const response = await fetch(DISCORD_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        if (response.ok) {
-            alert("✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!");
-            form.reset();
-            previewBox.style.display = 'none';
-        } else {
-            alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล");
-        }
-    } catch (error) {
-        console.error(error);
-        alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อ Discord");
-    }
-});
+    await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    alert("✅ ส่งประกาศเรียบร้อยแล้ว!");
+    form.reset();
+    updatePreview();
+}
 </script>
+</body>
+</html>
