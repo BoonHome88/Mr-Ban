@@ -1,183 +1,3 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📢 ระบบประกาศแบน | Midnight Racing</title>
-<style>
-:root {
-    --primary-color: #4a90e2;
-    --secondary-color: #f5f6fa;
-    --bg-color: #f5f6fa;
-    --card-color: #ffffff;
-    --text-dark: #2d3436;
-    --text-gray: #636e72;
-    --input-bg: #f0f0f0;
-    --input-border: #dcdde1;
-    --button-hover: #357ab7;
-    --card-width: 420px;
-}
-
-body {
-    background-color: var(--bg-color);
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-}
-
-h2 { text-align: center; color: var(--primary-color); margin-bottom: 20px; font-size: 1.8rem; }
-
-.card {
-    background: var(--card-color);
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    padding: 30px 25px;
-    width: var(--card-width);
-    max-width: 100%;
-    transition: all 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-}
-
-label { display: block; font-size: 0.95rem; color: var(--text-gray); margin-top: 15px; }
-
-input, textarea, select {
-    width: 100%;
-    padding: 12px 15px;
-    margin-top: 5px;
-    border: 1px solid var(--input-border);
-    border-radius: 10px;
-    background: var(--input-bg);
-    color: var(--text-dark);
-    font-size: 0.95rem;
-    outline: none;
-    transition: border 0.3s;
-    box-sizing: border-box;
-}
-
-input:focus, textarea:focus, select:focus { border-color: var(--primary-color); }
-
-textarea { resize: vertical; }
-
-button {
-    width: 100%;
-    padding: 12px;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    margin-top: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s;
-    box-sizing: border-box;
-}
-
-button:hover { background: var(--button-hover); transform: scale(1.03); }
-
-.preview {
-    background: var(--card-color);
-    border-radius: 12px;
-    padding: 25px;
-    width: calc(var(--card-width) + 20px);
-    max-width: 100%;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-}
-
-.embed {
-    border-left: 6px solid var(--primary-color);
-    border-radius: 8px;
-    padding: 15px 20px;
-    position: relative;
-    min-height: 80px;
-    box-sizing: border-box;
-    background: #f0f0f0;
-}
-
-.embed-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.embed-header img.avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    margin-right: 12px;
-}
-
-.embed-header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--primary-color);
-}
-
-.embed-field-value {
-    color: var(--text-dark);
-    line-height: 1.7em;
-}
-
-.embed-footer {
-    font-size: 0.8rem;
-    color: gray;
-    margin-top: 10px;
-}
-
-@media (max-width: 500px) {
-    .card, .preview { width: 95%; }
-}
-</style>
-</head>
-<body>
-
-<div class="card">
-    <h2>📢 ส่งประกาศแบน</h2>
-    <form id="banForm">
-        <label>ประเภทการแบน</label>
-        <select id="banType" required>
-            <option value="ถาวร">🔴 ถาวร</option>
-            <option value="ใบแดง">🔴 ใบแดง</option>
-            <option value="ใบส้ม">🟠 ใบส้ม</option>
-            <option value="ใบเหลือง">🟡 ใบเหลือง</option>
-            <option value="ปรับ">💸 ปรับ</option>
-        </select>
-
-        <label>ชื่อในเกม</label>
-        <input type="text" id="name" required>
-
-        <label>Discord ID</label>
-        <input type="text" id="discord" required placeholder="ตัวเลข ID Discord">
-
-        <label>Steam Hex</label>
-        <input type="text" id="steamhex" placeholder="steam:1100001xxxxxxx" required>
-
-        <label>เหตุผล (Reason)</label>
-        <textarea id="reason" rows="3" required></textarea>
-
-        <label>ค่าปรับ</label>
-        <input type="text" id="fine" value="0 IC">
-
-        <label>ผู้แบน</label>
-        <input type="text" id="admin" required>
-
-        <button type="button" id="previewBtn">🔍 แสดงตัวอย่าง</button>
-        <button type="submit">🚀 ส่งไป Discord</button>
-    </form>
-</div>
-
-<div class="preview" id="previewBox" style="display:none;">
-    <h2>👀 ตัวอย่าง Embed</h2>
-    <div class="embed" id="embedPreview"></div>
-</div>
-
 <script>
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
 const BACKEND_URL = "https://mr-ban-production.up.railway.app";
@@ -213,24 +33,24 @@ async function updatePreview() {
     const fine = document.getElementById('fine').value;
     const admin = document.getElementById('admin').value;
     const banType = document.getElementById('banType').value;
+
     const avatarUrl = await getDiscordAvatar(discord);
 
-    const color = colorMap[banType].color;
-
-    embedPreview.style.borderLeft = `6px solid ${color}`;
     embedPreview.innerHTML = `
         <div class="embed-header">
             <img src="${avatarUrl}" class="avatar">
-            <h3>${colorMap[banType].emoji} ประกาศใบ <span style="color:${color}">${banType}</span></h3>
+            <h3>${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color}">${banType}</span></h3>
         </div>
-        <div class="embed-field-value">
-            📢 ประเภท: ${banType}<br>
-            👤 ชื่อในเกม: ${name}<br>
-            💬 Discord ID: ${discord}<br>
-            🎮 Steam Hex: ${steam}<br>
-            ⚠️ เหตุผล: ${reason}<br>
-            💸 ค่าปรับ: ${fine}<br>
-            👮‍♂️ ผู้แบน: ${admin}
+        <div class="embed-field">
+            <div class="embed-field-value">
+                📢 ประเภท: ${banType}<br>
+                👤 ชื่อในเกม: ${name}<br>
+                💬 Discord ID: ${discord}<br>
+                🎮 Steam Hex: ${steam}<br>
+                ⚠️ เหตุผล: ${reason}<br>
+                💸 ค่าปรับ: ${fine}<br>
+                👮‍♂️ ผู้แบน: ${admin}
+            </div>
         </div>
         <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')}</div>
     `;
@@ -264,13 +84,13 @@ form.addEventListener('submit', async (e) => {
 
     const payload = {
         embeds: [{
-            title: `${colorMap[banType].emoji} ประกาศใบ ${banType}`,
+            title: "📢 ประกาศแบน",
             color: colorMap[banType].hex,
             thumbnail: { url: avatarUrl },
             fields: [
                 { name: "รายละเอียด", value: fieldValue, inline: false }
             ],
-            footer: { text: `ประกาศเมื่อ ${new Date().toLocaleString('th-TH')} | MR System` }
+            footer: { text: `ประกาศเมื่อ ${new Date().toLocaleString('th-TH')}` }
         }]
     };
 
@@ -293,9 +113,3 @@ form.addEventListener('submit', async (e) => {
     }
 });
 </script>
-
-<footer>
-<p>&copy; 2025 MOO TEDET99. All rights reserved.</p>
-</footer>
-</body>
-</html>
