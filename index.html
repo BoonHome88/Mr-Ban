@@ -267,7 +267,7 @@
           <h3>${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color}">${banType}</span></h3>
         </div>
         <div class="embed-field"><div class="embed-field-name">Name</div><div class="embed-field-value">${name}</div></div>
-        <div class="embed-field"><div class="embed-field-name">Discord ID</div><div class="embed-field-value">@${discord}</div></div>
+        <div class="embed-field"><div class="embed-field-name">Discord</div><div class="embed-field-value">@${discord}</div></div>
         <div class="embed-field"><div class="embed-field-name">Steam Hex</div><div class="embed-field-value">${steam}</div></div>
         <div class="embed-field"><div class="embed-field-name">Reason</div><div class="embed-field-value">${reason}</div></div>
         <div class="embed-field"><div class="embed-field-name">ค่าปรับ</div><div class="embed-field-value">${fine}</div></div>
@@ -295,6 +295,7 @@
       const avatarUrl = await getDiscordAvatar(discord);
 
       const payload = {
+        content: `<@${discord}>`, // ✅ แท็กผู้ใช้จริงใน Discord
         embeds: [
           {
             title: "📢 ประกาศแบน",
@@ -303,7 +304,7 @@
             fields: [
               { name: "ประเภท", value: banType, inline: true },
               { name: "ชื่อในเกม", value: name, inline: true },
-              { name: "Discord ID", value: discord, inline: true },
+              { name: "Discord", value: `<@${discord}>`, inline: true }, // ✅ mention ใน embed
               { name: "Steam Hex", value: steam, inline: true },
               { name: "เหตุผล", value: reason, inline: false },
               { name: "ค่าปรับ", value: fine, inline: true },
