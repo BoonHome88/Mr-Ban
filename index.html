@@ -204,7 +204,7 @@
       <label>ค่าปรับ</label>
       <input type="text" id="fine" value="0 IC" />
 
-      <label>ผู้แบน</label>
+      <label>แอดมินผู้รับเรื่อง</label>
       <input type="text" id="admin" required />
 
       <button type="button" id="previewBtn">🔍 แสดงตัวอย่าง</button>
@@ -269,7 +269,7 @@
         <div class="embed-field"><div class="embed-field-name">Steam Hex</div><div class="embed-field-value">${steam}</div></div>
         <div class="embed-field"><div class="embed-field-name">เหตุผล</div><div class="embed-field-value">${reason}</div></div>
         <div class="embed-field"><div class="embed-field-name">ค่าปรับ</div><div class="embed-field-value">${fine}</div></div>
-        <div class="embed-field"><div class="embed-field-name">ผู้แบน</div><div class="embed-field-value">${admin}</div></div>
+        <div class="embed-field"><div class="embed-field-name">แอดมินผู้รับเรื่อง</div><div class="embed-field-value">${admin}</div></div>
         <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | โดย [${admin}] MR System</div>
       `;
 
@@ -306,7 +306,7 @@
               { name: "Steam Hex", value: steam, inline: true },
               { name: "เหตุผล", value: reason, inline: false },
               { name: "ค่าปรับ", value: fine, inline: true },
-              { name: "ผู้แบน", value: admin, inline: true },
+              { name: "แอดมินผู้รับเรื่อง", value: admin, inline: true },
             ],
             timestamp: new Date(),
           },
@@ -339,4 +339,5 @@
   </footer>
 </body>
 </html>
+
 
