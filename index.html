@@ -158,19 +158,13 @@
     .embed-field-value {
       color: var(--text-dark);
       word-wrap: break-word;
+      white-space: pre-line; /* ✅ แสดง \n เป็นบรรทัดใหม่ */
     }
 
     .embed-footer {
       font-size: 0.8rem;
       color: gray;
       margin-top: 10px;
-    }
-
-    @media (max-width: 500px) {
-      .card,
-      .preview {
-        width: 95%;
-      }
     }
 
     footer {
@@ -261,15 +255,19 @@
       const banType = document.getElementById("banType").value;
       const avatarUrl = await getDiscordAvatar(discord);
 
+      const combinedValue = `ประเภท: ${banType}\nชื่อในเกม: ${name}\nDiscord: <@${discord}>`;
+
       embedPreview.innerHTML = `
         <div class="embed-header">
           <img src="${avatarUrl}" class="avatar">
           <h3>${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color}">${banType}</span></h3>
         </div>
-        <div class="embed-field"><div class="embed-field-name">Name</div><div class="embed-field-value">${name}</div></div>
-        <div class="embed-field"><div class="embed-field-name">Discord</div><div class="embed-field-value">@${discord}</div></div>
+        <div class="embed-field">
+          <div class="embed-field-name">ข้อมูลผู้ถูกแบน</div>
+          <div class="embed-field-value">${combinedValue}</div>
+        </div>
         <div class="embed-field"><div class="embed-field-name">Steam Hex</div><div class="embed-field-value">${steam}</div></div>
-        <div class="embed-field"><div class="embed-field-name">Reason</div><div class="embed-field-value">${reason}</div></div>
+        <div class="embed-field"><div class="embed-field-name">เหตุผล</div><div class="embed-field-value">${reason}</div></div>
         <div class="embed-field"><div class="embed-field-name">ค่าปรับ</div><div class="embed-field-value">${fine}</div></div>
         <div class="embed-field"><div class="embed-field-name">ผู้แบน</div><div class="embed-field-value">${admin}</div></div>
         <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | โดย [${admin}] MR System</div>
@@ -294,17 +292,17 @@
       const banType = document.getElementById("banType").value;
       const avatarUrl = await getDiscordAvatar(discord);
 
+      const combinedValue = `ประเภท: ${banType}\nชื่อในเกม: ${name}\nDiscord: <@${discord}>`;
+
       const payload = {
-        content: `<@${discord}>`, // ✅ แท็กผู้ใช้จริงใน Discord
+        content: `<@${discord}>`,
         embeds: [
           {
             title: "📢 ประกาศแบน",
             color: colorMap[banType].hex,
             thumbnail: { url: avatarUrl },
             fields: [
-              { name: "ประเภท", value: banType, inline: true },
-              { name: "ชื่อในเกม", value: name, inline: true },
-              { name: "Discord", value: `<@${discord}>`, inline: true }, // ✅ mention ใน embed
+              { name: "ข้อมูลผู้ถูกแบน", value: combinedValue, inline: false },
               { name: "Steam Hex", value: steam, inline: true },
               { name: "เหตุผล", value: reason, inline: false },
               { name: "ค่าปรับ", value: fine, inline: true },
@@ -316,21 +314,21 @@
       };
 
       try {
-        const response = await fetch(DISCORD_WEBHOOK_URL, {
+        const res = await fetch(DISCORD_WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
 
-        if (response.ok) {
+        if (res.ok) {
           alert("✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!");
           form.reset();
           previewBox.style.display = "none";
         } else {
           alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล");
         }
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
         alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อ Discord");
       }
     });
