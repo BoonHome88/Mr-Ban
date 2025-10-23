@@ -1,46 +1,38 @@
+// backend/server.js
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config(); // โหลดตัวแปรจาก .env
 
 const app = express();
 app.use(cors());
-app.use(express.json());
 
-// 🔧 ใส่ TOKEN ของ Discord Bot ที่อยู่ในเซิร์ฟเวอร์เดียวกับผู้เล่น
-const DISCORD_BOT_TOKEN = "YOUR_DISCORD_BOT_TOKEN_HERE";
+const BOT_TOKEN = process.env.BOT_TOKEN; // โหลดจาก Environment Variable
 
-app.get("/:discordId", async (req, res) => {
-    const { discordId } = req.params;
+app.get("/discord/:id", async (req, res) => {
+  const id = req.params.id;
 
-    try {
-        // ดึงข้อมูลผู้ใช้จาก Discord API
-        const response = await fetch(`https://discord.com/api/v10/users/${discordId}`, {
-            headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` }
-        });
+  try {
+    const response = await fetch(`https://discord.com/api/v10/users/${id}`, {
+      headers: {
+        Authorization: `Bot ${BOT_TOKEN}`,
+      },
+    });
 
-        if (!response.ok) {
-            // ถ้าไม่พบ user หรือ bot ไม่มีสิทธิ์ → ส่ง default avatar กลับ
-            const defaultAvatar = `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
-            return res.json({ avatar: defaultAvatar, error: "User not accessible or not found" });
-        }
-
-        const data = await response.json();
-        let avatarUrl;
-
-        if (data.avatar) {
-            const ext = data.avatar.startsWith("a_") ? "gif" : "png";
-            avatarUrl = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.${ext}?size=512`;
-        } else {
-            avatarUrl = `https://cdn.discordapp.com/embed/avatars/${data.discriminator % 5}.png`;
-        }
-
-        res.json({ avatar: avatarUrl });
-    } catch (err) {
-        console.error("Error fetching avatar:", err);
-        const fallback = `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
-        res.json({ avatar: fallback });
+    if (!response.ok) {
+      return res.status(response.status).json({ error: "ไม่พบข้อมูลผู้ใช้" });
     }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "เกิดข้อผิดพลาดขณะเชื่อมต่อ Discord API" });
+  }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(3000, () =>
+  console.log("✅ Backend รันที่ http://localhost:3000")
+);
