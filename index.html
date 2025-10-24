@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>📢 ระบบประกาศแบน | Midnight Racing</title>
-
   <style>
     :root {
       --primary-color: #4a90e2;
@@ -19,163 +18,27 @@
       --card-width: 420px;
     }
 
-    body {
-      background-color: var(--bg-color);
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 40px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
-    }
-
-    h2 {
-      text-align: center;
-      color: var(--primary-color);
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-    }
-
-    .card {
-      background: var(--card-color);
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-      padding: 30px 25px;
-      width: var(--card-width);
-      max-width: 100%;
-      transition: all 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    }
-
-    label {
-      display: block;
-      font-size: 0.95rem;
-      color: var(--text-gray);
-      margin-top: 15px;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 12px 15px;
-      margin-top: 5px;
-      border: 1px solid var(--input-border);
-      border-radius: 10px;
-      background: var(--input-bg);
-      color: var(--text-dark);
-      font-size: 0.95rem;
-      outline: none;
-      transition: border 0.3s;
-      box-sizing: border-box;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: var(--primary-color);
-    }
-
-    textarea {
-      resize: vertical;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      margin-top: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s;
-      box-sizing: border-box;
-    }
-
-    button:hover {
-      background: var(--button-hover);
-      transform: scale(1.03);
-    }
-
-    .preview {
-      background: var(--card-color);
-      border-radius: 12px;
-      padding: 25px;
-      width: calc(var(--card-width) + 20px);
-      max-width: 100%;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .embed {
-      background-color: #f0f0f0;
-      border-left: 5px solid var(--primary-color);
-      border-radius: 8px;
-      padding: 15px 15px 15px 20px;
-      position: relative;
-      min-height: 80px;
-      box-sizing: border-box;
-    }
-
-    .embed-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .embed-header img.avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      margin-right: 12px;
-    }
-
-    .embed-header h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: var(--primary-color);
-    }
-
-    .embed-field {
-      background: #fff;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 6px 0;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .embed-field-name {
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-
-    .embed-field-value {
-      color: var(--text-dark);
-      word-wrap: break-word;
-      white-space: pre-line;
-    }
-
-    .embed-footer {
-      font-size: 0.8rem;
-      color: gray;
-      margin-top: 10px;
-    }
-
-    footer {
-      margin-top: 20px;
-      color: #888;
-      font-size: 0.85rem;
-      text-align: center;
-    }
+    body { background-color: var(--bg-color); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+    h2 { text-align: center; color: var(--primary-color); margin-bottom: 20px; font-size: 1.8rem; }
+    .card { background: var(--card-color); border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); padding: 30px 25px; width: var(--card-width); max-width:100%; transition: all .3s ease; }
+    label { display:block; font-size:0.95rem; color:var(--text-gray); margin-top:15px; }
+    input, textarea, select { width:100%; padding:12px 15px; margin-top:5px; border:1px solid var(--input-border); border-radius:10px; background:var(--input-bg); color:var(--text-dark); font-size:0.95rem; outline:none; transition:border .3s; box-sizing:border-box; }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary-color); }
+    textarea { resize: vertical; }
+    button { width:100%; padding:12px; background:var(--primary-color); color:white; border:none; border-radius:10px; margin-top:20px; font-weight:600; cursor:pointer; transition: background .3s ease, transform .2s; box-sizing:border-box; }
+    button:hover { background:var(--button-hover); transform:scale(1.03); }
+    .preview { background:var(--card-color); border-radius:12px; padding:25px; width:calc(var(--card-width)+20px); max-width:100%; box-shadow:0 8px 20px rgba(0,0,0,0.05); }
+    .embed { background-color:#f0f0f0; border-left:5px solid var(--primary-color); border-radius:8px; padding:15px 15px 15px 20px; position:relative; min-height:80px; box-sizing:border-box; }
+    .embed-header { display:flex; align-items:center; margin-bottom:12px; }
+    .embed-header img.avatar { width:48px; height:48px; border-radius:50%; margin-right:12px; }
+    .embed-header h3 { margin:0; font-size:1.1rem; color:var(--primary-color); }
+    .embed-field { background:#fff; border-radius:8px; padding:10px 12px; margin:6px 0; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+    .embed-field-name { font-weight:bold; margin-bottom:4px; }
+    .embed-field-value { color:var(--text-dark); word-wrap:break-word; white-space:pre-line; }
+    .embed-footer { font-size:0.8rem; color:gray; margin-top:10px; }
+    footer { margin-top:20px; color:#888; font-size:0.85rem; text-align:center; }
   </style>
 </head>
-
 <body>
   <div class="card">
     <h2>📢 ส่งประกาศแบน</h2>
@@ -218,9 +81,6 @@
   </div>
 
   <script>
-    const DISCORD_WEBHOOK_URL =
-      "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
-
     const colorMap = {
       "ถาวร": { emoji: "🔴", hex: 0xff0000, color: "red" },
       "ใบแดง": { emoji: "🔴", hex: 0xff0000, color: "red" },
@@ -229,17 +89,13 @@
       "ปรับ": { emoji: "💸", hex: 0x00ff00, color: "green" },
     };
 
-    // ✅ ดึงข้อมูลโปรไฟล์ Discord โดยไม่ใช้ Token
     async function getDiscordAvatar(discordId) {
       try {
-        const res = await fetch(`https://discordlookup.mesavirep.xyz/v1/user/${discordId}`);
-        if (!res.ok) throw new Error("not found");
+        const res = await fetch(`/api/avatar/${discordId}`);
+        if (!res.ok) throw new Error('not found');
         const data = await res.json();
-        const user = data.user;
-        return user.avatar
-          ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`
-          : `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
-      } catch {
+        return data.avatar;
+      } catch (err) {
         return `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
       }
     }
@@ -289,44 +145,27 @@
       const fine = document.getElementById("fine").value;
       const admin = document.getElementById("admin").value;
       const banType = document.getElementById("banType").value;
-      const avatarUrl = await getDiscordAvatar(discord);
 
-      const payload = {
-        content: `<@${discord}>`,
-        embeds: [
-          {
-            title: "📢 ประกาศแบน",
-            color: colorMap[banType].hex,
-            thumbnail: { url: avatarUrl },
-            fields: [
-              { name: "ข้อมูลผู้ถูกแบน", value: `ประเภท: ${banType}\nชื่อในเกม: ${name}\nDiscord: <@${discord}>`, inline: false },
-              { name: "Steam Hex", value: steam, inline: true },
-              { name: "เหตุผล", value: reason, inline: false },
-              { name: "ค่าปรับ", value: fine, inline: true },
-              { name: "แอดมินผู้รับเรื่อง", value: admin, inline: true },
-            ],
-            timestamp: new Date(),
-          },
-        ],
-      };
+      const payload = { name, discord, steamhex: steam, reason, fine, admin, banType };
 
       try {
-        const res = await fetch(DISCORD_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const res = await fetch('/api/ban', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
 
         if (res.ok) {
-          alert("✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!");
-          e.target.reset();
-          document.getElementById("previewBox").style.display = "none";
+          alert('✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!');
+          document.getElementById('banForm').reset();
+          document.getElementById('previewBox').style.display = 'none';
         } else {
-          alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล");
+          const err = await res.json();
+          alert('❌ เกิดข้อผิดพลาด: ' + (err.error || JSON.stringify(err)));
         }
       } catch (err) {
         console.error(err);
-        alert("❌ ไม่สามารถเชื่อมต่อ Discord ได้");
+        alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อกับ server');
       }
     });
   </script>
