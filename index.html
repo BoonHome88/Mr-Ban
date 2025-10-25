@@ -282,24 +282,25 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
   const avatarUrl = await getSteamAvatar(steam);
 
   const payload = {
-    embeds: [
-      {
-        title: "📢 ประกาศลงโทษผู้เล่น",
-        color: colorMap[banType].hex,
-        thumbnail: { url: avatarUrl },
-        fields: [
-          { name: "ประเภทการลงโทษ", value: banType, inline: true },
-          { name: "📛 ชื่อในเกม", value: name, inline: true },
-          { name: "🎮 Steam Hex", value: steam, inline: true },
-          { name: "📃 เหตุผล", value: reason, inline: false },
-          { name: "💵 ค่าปรับ", value: fine, inline: true },
-          { name: "📣 แอดมินผู้รับเรื่อง", value: admin, inline: true },
-        ],
-        footer: { text: "ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์ • Midnight Racing" },
-        timestamp: new Date().toISOString(),
-      },
-    ],
-  };
+  embeds: [
+    {
+      title: "📢 ประกาศลงโทษผู้เล่น",
+      color: colorMap[banType].hex,
+      thumbnail: { url: avatarUrl },
+      fields: [
+        { name: "ประเภทการลงโทษ", value: banType, inline: true },
+        { name: "📛 ชื่อในเกม", value: name, inline: true },
+        { name: "🎮 Steam Hex", value: steam, inline: true },
+        { name: "📃 เหตุผล", value: reason, inline: false },
+        { name: "💵 ค่าปรับ", value: fine, inline: true },
+        { name: "📣 แอดมินผู้รับเรื่อง", value: admin, inline: true },
+      ],
+      footer: { 
+        text: `ประกาศเมื่อ | ${formattedDate} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์ • Midnight Racing` 
+      }
+    }
+  ]
+};
 
   try {
     const res = await fetch(DISCORD_WEBHOOK_URL, {
@@ -327,4 +328,5 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
 
