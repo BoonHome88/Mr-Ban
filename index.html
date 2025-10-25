@@ -186,6 +186,9 @@ footer {
     <label>📛 ชื่อในเกม</label>
     <input type="text" id="name" required />
 
+    <label>🆔 Discord ID</label>
+    <input type="text" id="discord" required placeholder="ตัวเลข ID Discord" />
+
     <label>🎮 Steam Hex</label>
     <input type="text" id="steamhex" placeholder="steam:1100001xxxxxxx" required />
 
@@ -219,34 +222,31 @@ const colorMap = {
   "ปรับ": { emoji: "💸", hex: 0x00ff00, color: "green" },
 };
 
-// แปลง Steam Hex เป็น SteamID64
-function hexToSteamID64(steamHex) {
-  return BigInt("0x" + steamHex.replace("steam:", "")) + 76561197960265728n;
-}
-
-// ดึง Avatar จาก Steam
-async function getSteamAvatar(steamHex) {
+// ฟังก์ชันดึง Avatar Discord
+async function getDiscordAvatar(discordId) {
   try {
-    const steamId64 = hexToSteamID64(steamHex);
-    const res = await fetch(`https://steamcommunity.com/profiles/${steamId64}/?xml=1`);
-    const text = await res.text();
-    const avatarMatch = text.match(/<avatarFull><!\[CDATA\[(.+?)\]\]><\/avatarFull>/);
-    if (avatarMatch) return avatarMatch[1];
-    return "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/default.jpg";
+    const res = await fetch(`https://discordlookup.mesavirep.xyz/v1/user/${discordId}`);
+    if (!res.ok) throw new Error("not found");
+    const data = await res.json();
+    const user = data.user;
+    return user.avatar
+      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`
+      : `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
   } catch {
-    return "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/default.jpg";
+    return `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
   }
 }
 
 async function updatePreview() {
   const name = document.getElementById("name").value;
+  const discord = document.getElementById("discord").value;
   const steam = document.getElementById("steamhex").value;
   const reason = document.getElementById("reason").value;
   const fine = document.getElementById("fine").value;
   const admin = document.getElementById("admin").value;
   const banType = document.getElementById("banType").value;
 
-  const avatarUrl = await getSteamAvatar(steam);
+  const avatarUrl = await getDiscordAvatar(discord);
 
   document.getElementById("embedPreview").innerHTML = `
     <div class="embed-header">
@@ -255,11 +255,12 @@ async function updatePreview() {
     </div>
     <div class="embed-field"><div class="embed-field-name">ประเภทการลงโทษ</div><div class="embed-field-value">${banType}</div></div>
     <div class="embed-field"><div class="embed-field-name">📛 ชื่อในเกม</div><div class="embed-field-value">${name}</div></div>
+    <div class="embed-field"><div class="embed-field-name">🆔 Discord</div><div class="embed-field-value"><@${discord}></div></div>
     <div class="embed-field"><div class="embed-field-name">🎮 Steam Hex</div><div class="embed-field-value">${steam}</div></div>
     <div class="embed-field"><div class="embed-field-name">📃 เหตุผล</div><div class="embed-field-value">${reason}</div></div>
     <div class="embed-field"><div class="embed-field-name">💵 ค่าปรับ</div><div class="embed-field-value">${fine}</div></div>
     <div class="embed-field"><div class="embed-field-name">📣 แอดมินผู้รับเรื่อง</div><div class="embed-field-value">${admin}</div></div>
-    <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | โดย [${admin}] MR System</div>
+    <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์ • Midnight Racing</div>
   `;
 
   document.getElementById("previewBox").style.display = "block";
@@ -273,46 +274,37 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
   await updatePreview();
 
   const name = document.getElementById("name").value;
+  const discord = document.getElementById("discord").value;
   const steam = document.getElementById("steamhex").value;
   const reason = document.getElementById("reason").value;
   const fine = document.getElementById("fine").value;
   const admin = document.getElementById("admin").value;
   const banType = document.getElementById("banType").value;
 
-  const avatarUrl = await getSteamAvatar(steam);
+  const avatarUrl = await getDiscordAvatar(discord);
 
-  const now = new Date();
-const formattedDate = now.toLocaleString('th-TH', {
-  weekday: 'long', 
-  year: 'numeric', 
-  month: 'long', 
-  day: 'numeric', 
-  hour: '2-digit', 
-  minute: '2-digit', 
-  second: '2-digit'
-});
-
-const payload = {
-  embeds: [
-    {
-      title: "📢 ประกาศลงโทษผู้เล่น",
-      color: colorMap[banType].hex,
-      thumbnail: { url: avatarUrl },
-      fields: [
-        { name: "ประเภทการลงโทษ", value: banType, inline: true },
-        { name: "📛 ชื่อในเกม", value: name, inline: true },
-        { name: "🎮 Steam Hex", value: steam, inline: true },
-        { name: "📃 เหตุผล", value: reason, inline: false },
-        { name: "💵 ค่าปรับ", value: fine, inline: true },
-        { name: "📣 แอดมินผู้รับเรื่อง", value: admin, inline: true },
-      ],
-      footer: { 
-        text: `ประกาศเมื่อ | ${formattedDate} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์ • Midnight Racing` 
-      }
-    }
-  ]
-};
-
+  const payload = {
+    content: `<@${discord}>`,
+    embeds: [
+      {
+        title: "📢 ประกาศลงโทษผู้เล่น",
+        color: colorMap[banType].hex,
+        thumbnail: { url: avatarUrl },
+        fields: [
+          { name: "ประเภทการลงโทษ", value: banType, inline: true },
+          { name: "📛 ชื่อในเกม", value: name, inline: true },
+          { name: "🆔 Discord", value: `<@${discord}>`, inline: true },
+          { name: "🎮 Steam Hex", value: steam, inline: true },
+          { name: "📃 เหตุผล", value: reason, inline: false },
+          { name: "💵 ค่าปรับ", value: fine, inline: true },
+          { name: "📣 แอดมินผู้รับเรื่อง", value: admin, inline: true },
+        ],
+        footer: {
+          text: `ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์ • Midnight Racing`
+        },
+      },
+    ],
+  };
 
   try {
     const res = await fetch(DISCORD_WEBHOOK_URL, {
@@ -340,6 +332,3 @@ const payload = {
 </footer>
 </body>
 </html>
-
-
-
