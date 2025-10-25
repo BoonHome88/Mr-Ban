@@ -291,7 +291,7 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
         color: colorMap[banType].hex,
         thumbnail: { url: avatarUrl },
         fields: [
-  { name: "ประเภทการลงโทษ",` value: `${banType} ``, inline: false },
+  { name: "ประเภทการลงโทษ", value: `\`${banType}\``, inline: false },
   { name: "📛 ชื่อ IC (In-Character)", value: `${name}`, inline: false },
   { name: "🆔 Discord", value: `<@${discord}>`, inline: true },
   { name: "🎮 Steam Hex", value: `${steam}`, inline: false },
@@ -332,6 +332,7 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
 
 
 
