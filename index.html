@@ -283,25 +283,27 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 
   const avatarUrl = await getDiscordAvatar(discord);
 
-  const payload = {
-    content: `<@${discord}>`,
-    embeds: [
-      {
-        title: "📢 ประกาศลงโทษผู้เล่น",
-        color: colorMap[banType].hex,
-        thumbnail: { url: avatarUrl },
-        fields: [
-          { name: "ประเภทการลงโทษ", value: ${banType} , inline: false },
-          { name: "📛 ชื่อ IC (In-Character)", value: ${name}, inline: false },
-          { name: "🆔 Discord", value: <@${discord}>, inline: true },
-          { name: "🎮 Steam Hex", value: ${steam}, inline: false },
-          { name: "📃 เหตุผล", value: ${reason}, inline: true },
-          { name: "💵 ค่าปรับ", value: ${fine}, inline: true },
-          { name: "📣 แอดมินผู้รับเรื่อง", value: ${admin}, inline: true },
-        ],
-      },
-    ],
+const payload = {
+  content: `<@${discord}>`,
+  embeds: [
+    {
+      title: "📢 ประกาศลงโทษผู้เล่น",
+      color: colorMap[banType].hex,
+      thumbnail: { url: avatarUrl },
+      fields: [
+        { name: "ประเภทการลงโทษ", value: `\`${banType}\``, inline: false },
+        { name: "📛 ชื่อ IC (In-Character)", value: `\`${name}\``, inline: false },
+        { name: "🆔 Discord", value: `<@${discord}>`, inline: true },
+        { name: "🎮 Steam Hex", value: `\`${steam}\``, inline: false },
+        { name: "📃 เหตุผล", value: `\`${reason}\``, inline: true },
+        { name: "💵 ค่าปรับ", value: `\`${fine}\``, inline: true },
+        { name: "📣 แอดมินผู้รับเรื่อง", value: `\`${admin}\``, inline: true },
+      ],
+      timestamp: new Date().toISOString(),
+    },
+  ],
 };
+
 
         footer: {
           text: `ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์`
@@ -336,6 +338,7 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
 
 
 
