@@ -293,10 +293,10 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
         fields: [
   { name: "ประเภทการลงโทษ", value: `${banType}`, inline: false },
   { name: "📛 ชื่อในเกม", value: `${name}`, inline: false },
-  { name: "🆔 Discord", value: `<@${discord}>`, inline: false },
-  { name: "🎮 Steam Hex", value: `${steam}`, inline: false },
-  { name: "📃 เหตุผล", value: `${reason}`, inline: false },
-  { name: "💵 ค่าปรับ", value: `${fine}`, inline: false },
+  { name: "🆔 Discord", value: `<@${discord}>`, inline: true },
+  { name: "🎮 Steam Hex", value: `${steam}`, inline: true },
+  { name: "📃 เหตุผล", value: `${reason}`, inline: true },
+  { name: "💵 ค่าปรับ", value: `${fine}`, inline: true },
   { name: "📣 แอดมินผู้รับเรื่อง", value: `${admin}`, inline: false },
         ],
         footer: {
@@ -332,4 +332,5 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
 
