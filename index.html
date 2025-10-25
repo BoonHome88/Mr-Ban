@@ -229,7 +229,6 @@
       "ปรับ": { emoji: "💸", hex: 0x00ff00, color: "green" },
     };
 
-    // ✅ ดึงข้อมูลโปรไฟล์ Discord โดยไม่ใช้ Token
     async function getDiscordAvatar(discordId) {
       try {
         const res = await fetch(`https://discordlookup.mesavirep.xyz/v1/user/${discordId}`);
@@ -254,17 +253,14 @@
       const banType = document.getElementById("banType").value;
       const avatarUrl = await getDiscordAvatar(discord);
 
-      const combinedValue = `ประเภท: ${banType}\n📛 ชื่อในเกม: ${name}\n🆔 Discord ID: <@${discord}>`;
-
       document.getElementById("embedPreview").innerHTML = `
         <div class="embed-header">
           <img src="${avatarUrl}" class="avatar">
           <h3>${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color}">${banType}</span></h3>
         </div>
-        <div class="embed-field">
-          <div class="embed-field-name">ข้อมูลผู้ถูกลงโทษ</div>
-          <div class="embed-field-value">${combinedValue}</div>
-        </div>
+        <div class="embed-field"><div class="embed-field-name">ประเภทการลงโทษ</div><div class="embed-field-value">${banType}</div></div>
+        <div class="embed-field"><div class="embed-field-name">📛 ชื่อในเกม</div><div class="embed-field-value">${name}</div></div>
+        <div class="embed-field"><div class="embed-field-name">🆔 Discord</div><div class="embed-field-value"><@${discord}></div></div>
         <div class="embed-field"><div class="embed-field-name">🎮 Steam Hex</div><div class="embed-field-value">${steam}</div></div>
         <div class="embed-field"><div class="embed-field-name">📃 เหตุผล</div><div class="embed-field-value">${reason}</div></div>
         <div class="embed-field"><div class="embed-field-name">💵 ค่าปรับ</div><div class="embed-field-value">${fine}</div></div>
@@ -291,60 +287,26 @@
       const banType = document.getElementById("banType").value;
       const avatarUrl = await getDiscordAvatar(discord);
 
-const payload = {
-  content: `<@${discord}>`,
-  embeds: [
-    {
-      title: "📢 ประกาศลงโทษผู้เล่น",
-      color: colorMap[banType].hex,
-      thumbnail: { url: avatarUrl },
-      fields: [
-        {
-          name: "ประเภทการลงโทษ",
-          value: banType,
-          inline: true
-        },
-        {
-          name: "📛 ชื่อในเกม",
-          value: name,
-          inline: true
-        },
-        {
-          name: "🆔 Discord",
-          value: `<@${discord}>`,
-          inline: true
-        },
-        {
-          name: "🎮 Steam Hex",
-          value: steam,
-          inline: true
-        },
-        {
-          name: "📃 เหตุผล",
-          value: reason,
-          inline: false
-        },
-        {
-          name: "💵 ค่าปรับ",
-          value: fine,
-          inline: true
-        },
-        {
-          name: "📣 แอดมินผู้รับเรื่อง",
-          value: admin,
-          inline: true
-        }
-      ],
-      footer: {
-        text: "ระบบประกาศลงโทษอัตโนมัติ • Midnight Racing"
-      },
-      timestamp: new Date().toISOString()
-    }
-  ]
-};
-            timestamp: new Date(),
-          },
-        ],
+      const payload = {
+        content: `<@${discord}>`,
+        embeds: [
+          {
+            title: "📢 ประกาศลงโทษผู้เล่น",
+            color: colorMap[banType].hex,
+            thumbnail: { url: avatarUrl },
+            fields: [
+              { name: "ประเภทการลงโทษ", value: banType, inline: true },
+              { name: "📛 ชื่อในเกม", value: name, inline: true },
+              { name: "🆔 Discord", value: `<@${discord}>`, inline: true },
+              { name: "🎮 Steam Hex", value: steam, inline: true },
+              { name: "📃 เหตุผล", value: reason, inline: false },
+              { name: "💵 ค่าปรับ", value: fine, inline: true },
+              { name: "📣 แอดมินผู้รับเรื่อง", value: admin, inline: true }
+            ],
+            footer: { text: "ระบบประกาศลงโทษอัตโนมัติ • Midnight Racing" },
+            timestamp: new Date().toISOString()
+          }
+        ]
       };
 
       try {
@@ -373,9 +335,3 @@ const payload = {
   </footer>
 </body>
 </html>
-
-
-
-
-
-
