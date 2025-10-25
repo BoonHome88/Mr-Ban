@@ -190,7 +190,7 @@ footer {
     <input type="text" id="discord" required placeholder="ตัวเลข ID Discord" />
 
     <label>🎮 Steam Hex</label>
-    <input type="text" id="steamhex" placeholder="steam:1100001xxxxxxx" required />
+    <input type="text" id="steamhex" placeholder="1100001xxxxxxx" required />
 
     <label>📃 เหตุผล (Reason)</label>
     <textarea id="reason" rows="3" required></textarea>
@@ -260,7 +260,7 @@ async function updatePreview() {
     <div class="embed-field"><div class="embed-field-name">📃 เหตุผล</div><div class="embed-field-value">${reason}</div></div>
     <div class="embed-field"><div class="embed-field-name">💵 ค่าปรับ</div><div class="embed-field-value">${fine}</div></div>
     <div class="embed-field"><div class="embed-field-name">📣 แอดมินผู้รับเรื่อง</div><div class="embed-field-value">${admin}</div></div>
-    <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์ • Midnight Racing</div>
+    <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์</div>
   `;
 
   document.getElementById("previewBox").style.display = "block";
@@ -300,7 +300,7 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
           { name: "📣 แอดมินผู้รับเรื่อง", value: admin, inline: true },
         ],
         footer: {
-          text: `ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์ • Midnight Racing`
+          text: `ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์`
         },
       },
     ],
@@ -332,3 +332,4 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
