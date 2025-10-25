@@ -281,7 +281,18 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 
   const avatarUrl = await getSteamAvatar(steam);
 
-  const payload = {
+  const now = new Date();
+const formattedDate = now.toLocaleString('th-TH', {
+  weekday: 'long', 
+  year: 'numeric', 
+  month: 'long', 
+  day: 'numeric', 
+  hour: '2-digit', 
+  minute: '2-digit', 
+  second: '2-digit'
+});
+
+const payload = {
   embeds: [
     {
       title: "📢 ประกาศลงโทษผู้เล่น",
@@ -301,6 +312,7 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
     }
   ]
 };
+
 
   try {
     const res = await fetch(DISCORD_WEBHOOK_URL, {
@@ -328,5 +340,6 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
 
 
