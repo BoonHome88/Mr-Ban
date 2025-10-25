@@ -182,7 +182,7 @@
     <form id="banForm">
       <label>ประเภทการลงโทษ</label>
       <select id="banType" required>
-        <option value="ถาวร">🔴 ถาวร</option>
+        <option value="แบนถาวร">🟥 แบนถาวร</option>
         <option value="ใบแดง">🔴 ใบแดง</option>
         <option value="ใบส้ม">🟠 ใบส้ม</option>
         <option value="ใบเหลือง">🟡 ใบเหลือง</option>
@@ -222,7 +222,7 @@
       "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
 
     const colorMap = {
-      "ถาวร": { emoji: "🔴", hex: 0xff0000, color: "red" },
+      "ถาวร": { emoji: "🟥", hex: 0xff0000, color: "red" },
       "ใบแดง": { emoji: "🔴", hex: 0xff0000, color: "red" },
       "ใบส้ม": { emoji: "🟠", hex: 0xffa500, color: "orange" },
       "ใบเหลือง": { emoji: "🟡", hex: 0xffff00, color: "yellow" },
@@ -256,7 +256,7 @@
       document.getElementById("embedPreview").innerHTML = `
         <div class="embed-header">
           <img src="${avatarUrl}" class="avatar">
-          <h3>${colorMap[banType].emoji} ประกาศใบ <span style="color:${colorMap[banType].color}">${banType}</span></h3>
+          <h3>${colorMap[banType].emoji} ประกาศลงโทษ <span style="color:${colorMap[banType].color}">${banType}</span></h3>
         </div>
         <div class="embed-field"><div class="embed-field-name">ประเภทการลงโทษ</div><div class="embed-field-value">${banType}</div></div>
         <div class="embed-field"><div class="embed-field-name">📛 ชื่อในเกม</div><div class="embed-field-value">${name}</div></div>
@@ -335,3 +335,4 @@
   </footer>
 </body>
 </html>
+
