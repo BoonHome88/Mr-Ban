@@ -283,64 +283,21 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 
   const avatarUrl = await getDiscordAvatar(discord);
 
-const payload = {
-  content: `<@${discord}>`,
-  embeds: [
-    {
-      title: "📢 ประกาศลงโทษผู้เล่น",
-      color: colorMap[banType].hex,
-      thumbnail: { url: avatarUrl },
-      fields: [
-        { name: "ประเภทการลงโทษ", value: `${banType}`, inline: true },
-        { name: "📛 ชื่อในเกม", value: `${name}`, inline: true },
-        { name: "🆔 Discord", value: `<@${discord}>`, inline: true },
-        { name: "🎮 Steam Hex", value: `${steam}`, inline: true },
-        { name: "📃 เหตุผล", value: `${reason}`, inline: false },
-        { name: "💵 ค่าปรับ", value: `${fine}`, inline: true },
-        { name: "📣 แอดมินผู้รับเรื่อง", value: `${admin}`, inline: true },
-      ],
-      footer: {
-        text: `ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์`
-      },
-    },
-  ],
-};
-
+  const payload = {
+    content: `<@${discord}>`,
+    embeds: [
+      {
+        title: "📢 ประกาศลงโทษผู้เล่น",
+        color: colorMap[banType].hex,
+        thumbnail: { url: avatarUrl },
+        fields: [
+          { name: "ประเภทการลงโทษ", value: `${banType}`, inline: true },
+          { name: "📛 ชื่อในเกม", value: `${name}`, inline: true },
+          { name: "🆔 Discord", value: `<@${discord}>`, inline: true },
+          { name: "🎮 Steam Hex", value: `${steam}`, inline: true },
+          { name: "📃 เหตุผล", value: `${reason}`, inline: false },
+          { name: "💵 ค่าปรับ", value: `${fine}`, inline: true },
+          { name: "📣 แอดมินผู้รับเรื่อง", value: `${admin}`, inline: true },
+        ],
         footer: {
-          text: `ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์`
-        },
-      },
-    ],
-  };
-
-  try {
-    const res = await fetch(DISCORD_WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    if (res.ok) {
-      alert("✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!");
-      e.target.reset();
-      document.getElementById("previewBox").style.display = "none";
-    } else {
-      alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("❌ ไม่สามารถเชื่อมต่อ Discord ได้");
-  }
-});
-</script>
-
-<footer>
-<p>&copy; 2025 MOO TEDET99. All rights reserved.</p>
-</footer>
-</body>
-</html>
-
-
-
-
-
+          text: `ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')}
