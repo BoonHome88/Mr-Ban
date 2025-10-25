@@ -295,7 +295,7 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
   { name: "📛 ชื่อในเกม", value: `${name}`, inline: false },
   { name: "🆔 Discord", value: `<@${discord}>`, inline: true },
   { name: "🎮 Steam Hex", value: `${steam}`, inline: true },
-  { name: "📃 เหตุผล", value: `${reason}`, inline: true },
+  { name: "📃 เหตุผล", value: `${reason}`, inline: false },
   { name: "💵 ค่าปรับ", value: `${fine}`, inline: true },
   { name: "📣 แอดมินผู้รับเรื่อง", value: `${admin}`, inline: false },
         ],
@@ -332,5 +332,6 @@ document.getElementById("banForm").addEventListener("submit", async (e) => {
 </footer>
 </body>
 </html>
+
 
 
