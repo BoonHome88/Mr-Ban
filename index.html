@@ -254,7 +254,7 @@
       const banType = document.getElementById("banType").value;
       const avatarUrl = await getDiscordAvatar(discord);
 
-      const combinedValue = `ประเภท: ${banType}\nชื่อในเกม: ${name}\nDiscord: <@${discord}>`;
+      const combinedValue = `ประเภท: ${banType}\n📛 ชื่อในเกม: ${name}\n🆔 Discord ID: <@${discord}>`;
 
       document.getElementById("embedPreview").innerHTML = `
         <div class="embed-header">
@@ -265,10 +265,10 @@
           <div class="embed-field-name">ข้อมูลผู้ถูกแบน</div>
           <div class="embed-field-value">${combinedValue}</div>
         </div>
-        <div class="embed-field"><div class="embed-field-name">Steam Hex</div><div class="embed-field-value">${steam}</div></div>
-        <div class="embed-field"><div class="embed-field-name">เหตุผล</div><div class="embed-field-value">${reason}</div></div>
-        <div class="embed-field"><div class="embed-field-name">ค่าปรับ</div><div class="embed-field-value">${fine}</div></div>
-        <div class="embed-field"><div class="embed-field-name">แอดมินผู้รับเรื่อง</div><div class="embed-field-value">${admin}</div></div>
+        <div class="embed-field"><div class="embed-field-name">🎮 Steam Hex</div><div class="embed-field-value">${steam}</div></div>
+        <div class="embed-field"><div class="embed-field-name">📃 เหตุผล</div><div class="embed-field-value">${reason}</div></div>
+        <div class="embed-field"><div class="embed-field-name">💵 ค่าปรับ</div><div class="embed-field-value">${fine}</div></div>
+        <div class="embed-field"><div class="embed-field-name">📣 แอดมินผู้รับเรื่อง</div><div class="embed-field-value">${admin}</div></div>
         <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | โดย [${admin}] MR System</div>
       `;
 
@@ -336,4 +336,5 @@
   </footer>
 </body>
 </html>
+
 
