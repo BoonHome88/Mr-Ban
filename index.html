@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>📢 ระบบประกาศแบน | Midnight Racing</title>
+  <title>📢 ระบบประกาศลงโทษผู้เล่น | Midnight Racing</title>
 
   <style>
     :root {
@@ -178,9 +178,9 @@
 
 <body>
   <div class="card">
-    <h2>📢 ส่งประกาศแบน</h2>
+    <h2>📢 ส่งประกาศลงโทษผู้เล่น</h2>
     <form id="banForm">
-      <label>ประเภทการแบน</label>
+      <label>ประเภทการลงโทษ</label>
       <select id="banType" required>
         <option value="ถาวร">🔴 ถาวร</option>
         <option value="ใบแดง">🔴 ใบแดง</option>
@@ -295,15 +295,15 @@
         content: `<@${discord}>`,
         embeds: [
           {
-            title: "📢 ประกาศแบน",
+            title: "📢 ประกาศลงโทษผู้เล่น",
             color: colorMap[banType].hex,
             thumbnail: { url: avatarUrl },
             fields: [
-              { name: "ข้อมูลผู้ถูกแบน", value: `ประเภท: ${banType}\nชื่อในเกม: ${name}\nDiscord: <@${discord}>`, inline: false },
-              { name: "Steam Hex", value: steam, inline: true },
-              { name: "เหตุผล", value: reason, inline: false },
-              { name: "ค่าปรับ", value: fine, inline: true },
-              { name: "แอดมินผู้รับเรื่อง", value: admin, inline: true },
+              { name: "ข้อมูลผู้ถูกแบน", value: `ประเภท: ${banType}\n📛 ชื่อในเกม: ${name}\n🆔 Discord: <@${discord}>`, inline: false },
+              { name: "🎮 Steam Hex", value: steam, inline: true },
+              { name: "📃 เหตุผล", value: reason, inline: false },
+              { name: "💵 ค่าปรับ", value: fine, inline: true },
+              { name: "📣 แอดมินผู้รับเรื่อง", value: admin, inline: true },
             ],
             timestamp: new Date(),
           },
@@ -336,5 +336,6 @@
   </footer>
 </body>
 </html>
+
 
 
