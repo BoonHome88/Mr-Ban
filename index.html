@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>📢 ระบบประกาศลงโทษผู้เล่น | Midnight Racing</title>
+<style>
+:root {
+  --primary-color: #4a90e2;
+  --secondary-color: #f5f6fa;
+  --bg-color: #f5f6fa;
+  --card-color: #ffffff;
+  --text-dark: #2d3436;
+  --text-gray: #636e72;
+  --input-bg: #f0f0f0;
+  --input-border: #dcdde1;
+  --button-hover: #357ab7;
+  --card-width: 420px;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+h2 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+}
+
+.card {
+  background: var(--card-color);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  padding: 30px 25px;
+  width: var(--card-width);
+  max-width: 100%;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+label {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text-gray);
+  margin-top: 15px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 5px;
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  background: var(--input-bg);
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.3s;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary-color);
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
+  box-sizing: border-box;
+}
+
+button:hover {
+  background: var(--button-hover);
+  transform: scale(1.03);
+}
+
+.preview {
+  background: var(--card-color);
+  border-radius: 12px;
+  padding: 25px;
+  width: calc(var(--card-width) + 20px);
+  max-width: 100%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.embed {
+  background-color: #f0f0f0;
+  border-left: 5px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 15px 15px 15px 20px;
+  position: relative;
+  min-height: 80px;
+  box-sizing: border-box;
+}
+
+.embed-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.embed-header img.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.embed-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
+
+.embed-field {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 6px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.embed-field-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.embed-field-value {
+  color: var(--text-dark);
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+.embed-footer {
+  font-size: 0.8rem;
+  color: gray;
+  margin-top: 10px;
+}
+
+footer {
+  margin-top: 20px;
+  color: #888;
+  font-size: 0.85rem;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>📢 ส่งประกาศลงโทษผู้เล่น</h2>
+  <form id="banForm">
+    <label>ประเภทการลงโทษ</label>
+    <select id="banType" required>
+      <option value="🟥 แบนถาวร">🟥 แบนถาวร</option>
+      <option value="🔴 ใบแดง">🔴 ใบแดง</option>
+      <option value="🟠 ใบส้ม">🟠 ใบส้ม</option>
+      <option value="🟡 ใบเหลืองง">🟡 ใบเหลือง</option>
+      <option value="💸 ปรับ">💸 ปรับ</option>
+    </select>
+
+    <label>📛 ชื่อในเกม</label>
+    <input type="text" id="name" required />
+
+    <label>🆔 Discord ID</label>
+    <input type="text" id="discord" required placeholder="ตัวเลข ID Discord" />
+
+    <label>🎮 Steam Hex</label>
+    <input type="text" id="steamhex" placeholder="1100001xxxxxxx" required />
+
+    <label>📃 เหตุผล (Reason)</label>
+    <textarea id="reason" rows="3" required></textarea>
+
+    <label>💵 ค่าปรับ</label>
+    <input type="text" id="fine" value="0 IC" />
+
+    <label>📣 แอดมินผู้รับเรื่อง</label>
+    <input type="text" id="admin" required />
+
+    <button type="button" id="previewBtn">🔍 แสดงตัวอย่าง</button>
+    <button type="submit">🚀 ส่งไป Discord</button>
+  </form>
+</div>
+
+<div class="preview" id="previewBox" style="display: none;">
+  <h2>👀 แสดงตัวอย่างข้อความ</h2>
+  <div class="embed" id="embedPreview"></div>
+</div>
+
+<script>
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1390666314716287007/gjFpxeI2T5Tx6odcZBSkftTLxhEtt8kCDIOTn1l35sOE09Kghp6ZtqxcktTNz4qAeGqB";
+
+const colorMap = {
+  "🟥 แบนถาวร": { emoji: "🟥", hex: 0xff0000, color: "red" },
+  "🔴 ใบแดง": { emoji: "🔴", hex: 0xff0000, color: "red" },
+  "🟠 ใบส้ม": { emoji: "🟠", hex: 0xffa500, color: "orange" },
+  "🟡 ใบเหลือง": { emoji: "🟡", hex: 0xffff00, color: "yellow" },
+  "💸 ปรับ": { emoji: "💸", hex: 0x00ff00, color: "green" },
+};
+
+// ฟังก์ชันดึง Avatar Discord
+async function getDiscordAvatar(discordId) {
+  try {
+    const res = await fetch(`https://discordlookup.mesavirep.xyz/v1/user/${discordId}`);
+    if (!res.ok) throw new Error("not found");
+    const data = await res.json();
+    const user = data.user;
+    return user.avatar
+      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=1024`
+      : `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
+  } catch {
+    return `https://cdn.discordapp.com/embed/avatars/${discordId % 5}.png`;
+  }
+}
+
+async function updatePreview() {
+  const name = document.getElementById("name").value;
+  const discord = document.getElementById("discord").value;
+  const steam = document.getElementById("steamhex").value;
+  const reason = document.getElementById("reason").value;
+  const fine = document.getElementById("fine").value;
+  const admin = document.getElementById("admin").value;
+  const banType = document.getElementById("banType").value;
+
+  const avatarUrl = await getDiscordAvatar(discord);
+
+  document.getElementById("embedPreview").innerHTML = `
+    <div class="embed-header">
+      <img src="${avatarUrl}" class="avatar">
+      <h3>${colorMap[banType].emoji} ประกาศลงโทษ <span style="color:${colorMap[banType].color}">${banType}</span></h3>
+    </div>
+    <div class="embed-field"><div class="embed-field-name">ประเภทการลงโทษ</div><div class="embed-field-value">${banType}</div></div>
+    <div class="embed-field"><div class="embed-field-name">📛 ชื่อในเกม</div><div class="embed-field-value">${name}</div></div>
+    <div class="embed-field"><div class="embed-field-name">🆔 Discord</div><div class="embed-field-value"><@${discord}></div></div>
+    <div class="embed-field"><div class="embed-field-name">🎮 Steam Hex</div><div class="embed-field-value">${steam}</div></div>
+    <div class="embed-field"><div class="embed-field-name">📃 เหตุผล</div><div class="embed-field-value">${reason}</div></div>
+    <div class="embed-field"><div class="embed-field-name">💵 ค่าปรับ</div><div class="embed-field-value">${fine}</div></div>
+    <div class="embed-field"><div class="embed-field-name">📣 แอดมินผู้รับเรื่อง</div><div class="embed-field-value">${admin}</div></div>
+    <div class="embed-footer">ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์</div>
+  `;
+
+  document.getElementById("previewBox").style.display = "block";
+  document.getElementById("previewBox").scrollIntoView({ behavior: "smooth" });
+}
+
+document.getElementById("previewBtn").addEventListener("click", updatePreview);
+
+document.getElementById("banForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  await updatePreview();
+
+  const name = document.getElementById("name").value;
+  const discord = document.getElementById("discord").value;
+  const steam = document.getElementById("steamhex").value;
+  const reason = document.getElementById("reason").value;
+  const fine = document.getElementById("fine").value;
+  const admin = document.getElementById("admin").value;
+  const banType = document.getElementById("banType").value;
+
+  const avatarUrl = await getDiscordAvatar(discord);
+
+const payload = {
+  content: `<@${discord}>`,
+  embeds: [
+    {
+      title: "📢 ประกาศลงโทษผู้เล่น",
+      color: colorMap[banType].hex,
+      thumbnail: { url: avatarUrl },
+      fields: [
+        { name: "ประเภทการลงโทษ", value: `\`${banType}\``, inline: false },
+        { name: "📛 ชื่อ IC (In-Character)", value: `\`${name}\``, inline: false },
+        { name: "🆔 Discord", value: `<@${discord}>`, inline: true },
+        { name: "🎮 Steam Hex", value: `\`${steam}\``, inline: false },
+        { name: "📃 เหตุผล", value: `\`${reason}\``, inline: true },
+        { name: "💵 ค่าปรับ", value: `\`${fine}\``, inline: true },
+        { name: "📣 แอดมินผู้รับเรื่อง", value: `\`${admin}\``, inline: true },
+      ],
+        footer: {
+          text: `ประกาศเมื่อ | ${new Date().toLocaleString('th-TH')} | ขอให้ผู้เล่นทุกท่านเคารพกฏระเบียบของเซิฟเวอร์`
+        }
+      }
+    ]
+  };
+
+  try {
+    const res = await fetch(DISCORD_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (res.ok) {
+      alert("✅ ส่งข้อความไป Discord เรียบร้อยแล้ว!");
+      e.target.reset();
+      document.getElementById("previewBox").style.display = "none";
+    } else {
+      alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("❌ ไม่สามารถเชื่อมต่อ Discord ได้");
+  }
+});
+</script>
+
+<footer>
+<p>&copy; 2025 MOO TEDET99. All rights reserved.</p>
+</footer>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
